@@ -1,0 +1,1809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coach Hala El Shahawy — Life Coaching</title>
+<meta name="description" content="Certified ICF Life Coach in Cairo, Egypt. Book personal coaching sessions for career, mindset, relationships, and well-being. In-Person & Zoom available.">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    /* Cheerful, warm, vibrant — coral + violet + sunny yellow on soft white */
+    --coral:    #E8613A;
+    --coral-dk: #C94E2A;
+    --coral-lt: #F07D57;
+    --violet:   #7B5EA7;
+    --violet-lt:#9B7EC8;
+    --sunny:    #F5C842;
+    --sunny-lt: #FAD96A;
+    --mint:     #4CB08A;
+    --bg:       #FFF8F5;
+    --sand:     #FFF0E8;
+    --sand-dk:  #FFD9C5;
+    --white:    #FFFFFF;
+    --charcoal: #2C2424;
+    --mid:      #6B6070;
+    --border:   #EDD8CC;
+    --shadow:   0 4px 24px rgba(232,97,58,.10);
+    --shadow-lg:0 12px 48px rgba(232,97,58,.16);
+    --radius:   14px;
+    --transition:.3s cubic-bezier(.4,0,.2,1);
+  }
+
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; font-size: 16px; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--bg);
+    color: var(--charcoal);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+  h1,h2,h3,h4 { font-family: 'Cormorant Garamond', serif; line-height: 1.2; }
+  img { max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+
+  .page { display: none; min-height: 100vh; }
+  .page.active { display: block; }
+
+  /* ── NAV ── */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 999;
+    background: rgba(255,248,245,.97);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 5vw;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 70px;
+  }
+  .nav-logo {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.2rem; font-weight: 700; color: var(--coral-dk);
+    letter-spacing: .02em;
+  }
+  .nav-logo span { color: var(--violet); }
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a {
+    font-size: .875rem; font-weight: 500; color: var(--mid);
+    transition: color var(--transition); cursor: pointer;
+  }
+  .nav-links a:hover, .nav-links a.active { color: var(--coral); }
+  .nav-cta {
+    background: var(--coral) !important; color: var(--white) !important;
+    padding: .5rem 1.25rem; border-radius: 100px;
+    font-weight: 600 !important;
+    transition: background var(--transition) !important;
+  }
+  .nav-cta:hover { background: var(--coral-dk) !important; }
+  .hamburger { display: none; cursor: pointer; flex-direction: column; gap: 5px; }
+  .hamburger span { display: block; width: 24px; height: 2px; background: var(--coral); transition: var(--transition); }
+
+  /* ── HERO ── */
+  .hero {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #7B5EA7 0%, #9B6AC8 40%, #E8613A 100%);
+    display: flex; align-items: center;
+    padding: 110px 5vw 70px;
+    position: relative; overflow: hidden;
+  }
+  .hero-blob1 {
+    position: absolute; right: -80px; top: -80px;
+    width: 500px; height: 500px; border-radius: 50%;
+    background: rgba(245,200,66,.15); pointer-events: none;
+  }
+  .hero-blob2 {
+    position: absolute; right: 120px; bottom: -120px;
+    width: 320px; height: 320px; border-radius: 50%;
+    background: rgba(255,255,255,.08); pointer-events: none;
+  }
+  .hero-blob3 {
+    position: absolute; left: -60px; bottom: 60px;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(245,200,66,.1); pointer-events: none;
+  }
+  .hero-content { max-width: 640px; z-index: 1; }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(255,255,255,.18); border: 1px solid rgba(255,255,255,.35);
+    color: var(--sunny-lt); padding: .4rem 1rem; border-radius: 100px;
+    font-size: .78rem; font-weight: 600; letter-spacing: .06em; text-transform: uppercase;
+    margin-bottom: 1.75rem;
+  }
+  .hero h1 {
+    font-size: clamp(2.4rem, 5vw, 4rem);
+    color: var(--white); font-weight: 300; line-height: 1.1;
+    margin-bottom: .75rem;
+  }
+  .hero h1 em { font-style: italic; color: var(--sunny-lt); }
+  .hero h1 strong { font-weight: 700; display: block; }
+  .hero-tag {
+    font-size: 1.1rem; color: rgba(255,255,255,.8);
+    font-family: 'Cormorant Garamond', serif; font-style: italic;
+    margin-bottom: 2rem; line-height: 1.5;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--sunny); color: var(--charcoal);
+    padding: .85rem 2rem; border-radius: 100px;
+    font-weight: 700; font-size: .95rem;
+    border: none; cursor: pointer;
+    transition: all var(--transition);
+    display: inline-flex; align-items: center; gap: .5rem;
+  }
+  .btn-primary:hover { background: var(--sunny-lt); transform: translateY(-2px); box-shadow: 0 8px 28px rgba(245,200,66,.4); }
+  .btn-outline {
+    background: transparent; color: var(--white);
+    padding: .85rem 2rem; border-radius: 100px;
+    font-weight: 500; font-size: .95rem;
+    border: 1.5px solid rgba(255,255,255,.5); cursor: pointer;
+    transition: all var(--transition);
+  }
+  .btn-outline:hover { border-color: var(--white); background: rgba(255,255,255,.1); }
+  .hero-stats {
+    display: flex; gap: 2.5rem; margin-top: 3rem;
+    padding-top: 2rem; border-top: 1px solid rgba(255,255,255,.2);
+  }
+  .stat-num {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2rem; font-weight: 700; color: var(--sunny-lt); line-height: 1;
+  }
+  .stat-label { font-size: .75rem; color: rgba(255,255,255,.65); margin-top: .25rem; text-transform: uppercase; letter-spacing: .06em; }
+
+  /* ── SECTIONS ── */
+  section { padding: 80px 5vw; }
+  .section-eyebrow {
+    font-size: .75rem; font-weight: 700; letter-spacing: .14em;
+    text-transform: uppercase; color: var(--coral); margin-bottom: .6rem;
+  }
+  .section-title {
+    font-size: clamp(1.8rem, 3.5vw, 2.8rem);
+    font-weight: 500; color: var(--charcoal); margin-bottom: 1rem;
+  }
+  .section-subtitle {
+    font-size: 1rem; color: var(--mid); max-width: 560px;
+    line-height: 1.8; margin-bottom: 3rem;
+  }
+  .center { text-align: center; }
+  .center .section-subtitle { margin-left: auto; margin-right: auto; }
+
+  /* ── ICF STRIP ── */
+  .icf-strip {
+    background: var(--sand); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    padding: 22px 5vw;
+    display: flex; align-items: center; justify-content: center; gap: 1.5rem; flex-wrap: wrap;
+  }
+  .icf-badge {
+    display: flex; align-items: center; gap: .75rem;
+    background: var(--white); border: 1.5px solid var(--border);
+    padding: .7rem 1.25rem; border-radius: 10px;
+    box-shadow: var(--shadow);
+  }
+  .icf-logo {
+    width: 42px; height: 42px; background: var(--violet);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif; font-weight: 700; font-size: .9rem; color: var(--white);
+    flex-shrink: 0;
+  }
+  .icf-text strong { font-size: .83rem; color: var(--charcoal); display: block; }
+  .icf-text span { font-size: .73rem; color: var(--mid); }
+
+  /* ── SERVICE CARDS ── */
+  .services-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 1.25rem; }
+  .service-card {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.75rem;
+    transition: all var(--transition); position: relative; overflow: hidden;
+  }
+  .service-card::after {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 4px;
+    background: linear-gradient(90deg, var(--coral), var(--violet));
+    opacity: 0; transition: opacity var(--transition);
+  }
+  .service-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-4px); border-color: var(--sand-dk); }
+  .service-card:hover::after { opacity: 1; }
+  .service-icon {
+    width: 48px; height: 48px; background: var(--sand);
+    border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1.1rem; font-size: 1.4rem;
+  }
+  .service-card h3 { font-size: 1.15rem; color: var(--charcoal); margin-bottom: .4rem; }
+  .service-card p { font-size: .875rem; color: var(--mid); line-height: 1.65; }
+
+  /* ── PRICING ── */
+  .pricing-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 1.25rem; }
+  .price-card {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.75rem; text-align: center;
+    transition: all var(--transition); position: relative;
+  }
+  .price-card:hover { box-shadow: var(--shadow-lg); transform: translateY(-3px); }
+  .price-card.featured {
+    background: linear-gradient(145deg, var(--violet) 0%, #9B5EB5 100%);
+    border-color: var(--violet); color: var(--white);
+  }
+  .price-card.featured .price-name { color: var(--sunny-lt); }
+  .price-card.featured .price-desc { color: rgba(255,255,255,.7); }
+  .price-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--sunny); color: var(--charcoal);
+    font-size: .68rem; font-weight: 800; letter-spacing: .06em; text-transform: uppercase;
+    padding: .3rem .85rem; border-radius: 100px;
+  }
+  .price-name { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; font-weight: 600; color: var(--charcoal); margin-bottom: .25rem; }
+  .price-amount {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 2.6rem; font-weight: 700; color: var(--coral); margin: .75rem 0 .1rem;
+    line-height: 1;
+  }
+  .price-card.featured .price-amount { color: var(--sunny-lt); }
+  .price-period { font-size: .78rem; color: var(--mid); margin-bottom: .4rem; }
+  .price-card.featured .price-period { color: rgba(255,255,255,.6); }
+  .price-savings {
+    background: rgba(245,200,66,.15); color: var(--coral);
+    font-size: .76rem; font-weight: 700;
+    padding: .28rem .7rem; border-radius: 100px; display: inline-block; margin: .4rem 0 .9rem;
+    border: 1px solid rgba(245,200,66,.3);
+  }
+  .price-card.featured .price-savings { background: rgba(245,200,66,.2); color: var(--sunny-lt); border-color: rgba(245,200,66,.4); }
+  .price-desc { font-size: .84rem; color: var(--mid); margin-bottom: 1.25rem; line-height: 1.6; }
+  .btn-book {
+    width: 100%; padding: .7rem; border-radius: 100px;
+    font-weight: 700; font-size: .88rem; cursor: pointer; border: none;
+    background: var(--coral); color: var(--white);
+    transition: all var(--transition); font-family: inherit;
+  }
+  .btn-book:hover { background: var(--coral-dk); transform: translateY(-1px); }
+  .price-card.featured .btn-book { background: var(--sunny); color: var(--charcoal); }
+  .price-card.featured .btn-book:hover { background: var(--sunny-lt); }
+
+  /* ── TESTIMONIALS ── */
+  .testimonials-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(290px, 1fr)); gap: 1.25rem; }
+  .testimonial {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.75rem;
+    transition: box-shadow var(--transition);
+  }
+  .testimonial:hover { box-shadow: var(--shadow); }
+  .testimonial-quote {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.08rem; font-style: italic; color: var(--charcoal);
+    line-height: 1.75; margin-bottom: 1.1rem;
+  }
+  .testimonial-quote::before { content: '"'; font-size: 2.5rem; color: var(--coral); line-height: 0; vertical-align: -0.45rem; margin-right: .1rem; font-style: normal; }
+  .testimonial-author { display: flex; align-items: center; gap: .7rem; }
+  .avatar { width: 38px; height: 38px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: .82rem; color: var(--white); flex-shrink: 0; }
+  .testimonial-name { font-weight: 600; font-size: .88rem; color: var(--charcoal); }
+  .testimonial-role { font-size: .76rem; color: var(--mid); }
+  .stars { color: var(--sunny); font-size: .88rem; margin-bottom: .7rem; }
+
+  /* ── BOOKING ── */
+  .booking-layout { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; max-width: 1080px; margin: 0 auto; }
+  .booking-steps {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: var(--radius); overflow: hidden; margin-bottom: 1rem;
+  }
+  .step-header {
+    background: var(--sand); border-bottom: 1px solid var(--border);
+    padding: 1.1rem 1.5rem;
+    display: flex; align-items: center; gap: .85rem;
+  }
+  .step-num {
+    width: 26px; height: 26px; background: var(--coral); color: var(--white);
+    border-radius: 50%; display: flex; align-items: center; justify-content: center;
+    font-size: .74rem; font-weight: 700; flex-shrink: 0;
+  }
+  .step-num.done { background: var(--mint); }
+  .step-title { font-weight: 600; font-size: .92rem; color: var(--charcoal); }
+  .step-content { padding: 1.5rem; }
+  .option-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(145px, 1fr)); gap: .65rem; }
+  .option-btn {
+    padding: .8rem; border: 1.5px solid var(--border);
+    border-radius: 10px; background: var(--white); cursor: pointer;
+    text-align: center; transition: all var(--transition); font-family: inherit;
+  }
+  .option-btn:hover { border-color: var(--coral-lt); background: rgba(232,97,58,.04); }
+  .option-btn.selected { border-color: var(--coral); background: rgba(232,97,58,.06); }
+  .option-btn .opt-label { font-size: .88rem; font-weight: 600; color: var(--charcoal); display: block; }
+  .option-btn .opt-sub { font-size: .75rem; color: var(--mid); display: block; margin-top: .18rem; }
+  .option-btn.selected .opt-label { color: var(--coral); }
+
+  /* Calendar */
+  .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: .85rem; }
+  .cal-nav { background: none; border: 1.5px solid var(--border); border-radius: 8px; width: 32px; height: 32px; cursor: pointer; font-size: .9rem; color: var(--coral); transition: all var(--transition); }
+  .cal-nav:hover { background: var(--sand); border-color: var(--coral); }
+  .cal-month { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--charcoal); }
+  .cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+  .cal-day-label { text-align: center; font-size: .7rem; font-weight: 700; color: var(--mid); padding: .25rem 0; text-transform: uppercase; }
+  .cal-day {
+    aspect-ratio: 1; display: flex; align-items: center; justify-content: center;
+    border-radius: 8px; font-size: .84rem; cursor: pointer;
+    transition: all var(--transition); border: 1.5px solid transparent;
+  }
+  .cal-day.empty { cursor: default; }
+  .cal-day.past { color: #D0C8C8; cursor: default; }
+  .cal-day.available:hover { background: var(--sand); border-color: var(--coral-lt); }
+  .cal-day.selected { background: var(--coral); color: var(--white); border-color: var(--coral); }
+  .cal-day.booked { background: rgba(200,190,190,.2); color: #B8AEAE; cursor: not-allowed; text-decoration: line-through; }
+  .cal-day.today { border-color: var(--violet); font-weight: 700; color: var(--violet); }
+  .cal-day.selected.today { color: var(--white); }
+  .slots-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: .45rem; margin-top: .65rem; }
+  .slot {
+    padding: .5rem .25rem; text-align: center; border: 1.5px solid var(--border);
+    border-radius: 8px; font-size: .8rem; cursor: pointer;
+    transition: all var(--transition);
+  }
+  .slot.taken { background: rgba(200,190,190,.2); color: #B0A8A8; cursor: not-allowed; text-decoration: line-through; font-size: .75rem; }
+  .slot.available:hover { border-color: var(--coral-lt); background: rgba(232,97,58,.05); }
+  .slot.selected { border-color: var(--coral); background: rgba(232,97,58,.09); color: var(--coral); font-weight: 700; }
+
+  /* Summary */
+  .booking-summary {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.5rem;
+    position: sticky; top: 82px;
+  }
+  .summary-title { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--charcoal); margin-bottom: 1.1rem; }
+  .summary-row { display: flex; justify-content: space-between; align-items: flex-start; padding: .55rem 0; border-bottom: 1px solid var(--sand); font-size: .85rem; }
+  .summary-row:last-of-type { border-bottom: none; }
+  .summary-row .label { color: var(--mid); }
+  .summary-row .val { font-weight: 600; color: var(--charcoal); text-align: right; max-width: 55%; }
+  .summary-total { background: var(--sand); border-radius: 10px; padding: .85rem 1rem; margin: .85rem 0; }
+  .deposit-toggle { display: flex; gap: .5rem; margin: .75rem 0; }
+  .dep-btn {
+    flex: 1; padding: .55rem .4rem; font-size: .8rem; font-weight: 500;
+    border: 1.5px solid var(--border); border-radius: 100px; cursor: pointer;
+    background: var(--white); transition: all var(--transition); font-family: inherit; text-align: center;
+  }
+  .dep-btn.active { border-color: var(--coral); background: rgba(232,97,58,.08); color: var(--coral); font-weight: 700; }
+
+  /* ── CHECKOUT ── */
+  .checkout-layout { display: grid; grid-template-columns: 1fr 340px; gap: 2rem; max-width: 1000px; margin: 0 auto; }
+  .form-section {
+    background: var(--white); border: 1.5px solid var(--border);
+    border-radius: var(--radius); padding: 1.75rem; margin-bottom: 1.25rem;
+  }
+  .form-section-title { font-family: 'Cormorant Garamond', serif; font-size: 1.15rem; color: var(--charcoal); margin-bottom: 1.1rem; padding-bottom: .7rem; border-bottom: 1px solid var(--sand); }
+  .form-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: .85rem; }
+  .form-group { display: flex; flex-direction: column; gap: .35rem; }
+  .form-group label { font-size: .79rem; font-weight: 600; color: var(--charcoal); }
+  .form-group input, .form-group select, .form-group textarea {
+    padding: .65rem .9rem; border: 1.5px solid var(--border); border-radius: 8px;
+    font-family: inherit; font-size: .88rem; color: var(--charcoal);
+    background: var(--white); transition: border-color var(--transition);
+    outline: none;
+  }
+  .form-group input:focus, .form-group select:focus, .form-group textarea:focus { border-color: var(--coral); }
+  .payment-methods { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; margin-bottom: 1.1rem; }
+  .pay-method {
+    border: 1.5px solid var(--border); border-radius: 10px; padding: .9rem;
+    cursor: pointer; transition: all var(--transition); text-align: center;
+  }
+  .pay-method.selected { border-color: var(--coral); background: rgba(232,97,58,.05); }
+  .pay-method-icon { font-size: 1.4rem; margin-bottom: .2rem; }
+  .pay-method-label { font-size: .8rem; font-weight: 700; color: var(--charcoal); }
+  .pay-method-sub { font-size: .7rem; color: var(--mid); }
+  .terms-check { display: flex; gap: .65rem; align-items: flex-start; margin: .85rem 0; }
+  .terms-check input[type=checkbox] { width: 17px; height: 17px; margin-top: 3px; accent-color: var(--coral); flex-shrink: 0; }
+  .terms-check label { font-size: .83rem; color: var(--mid); line-height: 1.55; cursor: pointer; }
+  .terms-check a { color: var(--coral); text-decoration: underline; cursor: pointer; }
+  .pay-btn {
+    width: 100%; padding: .9rem; background: var(--coral); color: var(--white);
+    border: none; border-radius: 100px; font-size: .95rem; font-weight: 700;
+    cursor: pointer; transition: all var(--transition); font-family: inherit;
+  }
+  .pay-btn:hover:not(:disabled) { background: var(--coral-dk); transform: translateY(-1px); }
+  .pay-btn:disabled { opacity: .4; cursor: not-allowed; }
+  .secure-badges { display: flex; gap: .75rem; justify-content: center; margin-top: .85rem; flex-wrap: wrap; }
+  .secure-badge { display: flex; align-items: center; gap: .3rem; font-size: .7rem; color: var(--mid); }
+
+  /* ── ABOUT ── */
+  .about-layout { display: grid; grid-template-columns: 1fr 1.6fr; gap: 4rem; align-items: start; }
+  .about-photo-wrap { position: sticky; top: 82px; }
+  .about-photo {
+    width: 100%; aspect-ratio: 3/4; border-radius: var(--radius);
+    background: linear-gradient(145deg, var(--violet) 0%, var(--coral) 100%);
+    position: relative; overflow: hidden;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .coach-initials {
+    font-family: 'Cormorant Garamond', serif; font-size: 6rem; font-weight: 300;
+    color: rgba(255,255,255,.22); line-height: 1; text-align: center;
+  }
+  .coach-name-photo {
+    position: absolute; bottom: 1.5rem; left: 0; right: 0; text-align: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 1rem;
+    color: rgba(255,255,255,.75); letter-spacing: .05em;
+  }
+  .philosophy-list { list-style: none; display: flex; flex-direction: column; gap: .65rem; margin: 1.25rem 0; }
+  .philosophy-list li {
+    display: flex; gap: .7rem; align-items: flex-start;
+    font-size: .92rem; color: var(--mid); line-height: 1.65;
+  }
+  .philosophy-list li::before { content: '✦'; color: var(--coral); font-size: .55rem; margin-top: .5rem; flex-shrink: 0; }
+
+  /* ── CONTACT ── */
+  .contact-layout { display: grid; grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+  .contact-info {
+    padding: 2.25rem; border-radius: var(--radius); color: var(--white);
+    background: linear-gradient(145deg, var(--violet) 0%, var(--coral) 100%);
+  }
+  .contact-info h3 { font-size: 1.5rem; margin-bottom: .4rem; color: var(--sunny-lt); }
+  .contact-info p { color: rgba(255,255,255,.75); margin-bottom: 1.75rem; font-size: .92rem; }
+  .contact-detail { display: flex; gap: .85rem; align-items: center; margin-bottom: 1.1rem; }
+  .contact-icon { width: 38px; height: 38px; background: rgba(255,255,255,.15); border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+  .contact-detail-text strong { display: block; font-size: .82rem; color: var(--sunny-lt); }
+  .contact-detail-text span { font-size: .88rem; color: rgba(255,255,255,.85); }
+  .social-links { display: flex; gap: .65rem; margin-top: 1.75rem; }
+  .social-link {
+    width: 36px; height: 36px; background: rgba(255,255,255,.15);
+    border-radius: 8px; display: flex; align-items: center; justify-content: center;
+    font-size: .88rem; color: var(--white); transition: all var(--transition); cursor: pointer;
+  }
+  .social-link:hover { background: var(--sunny); color: var(--charcoal); }
+
+  /* ── TERMS ── */
+  .terms-content { max-width: 740px; margin: 0 auto; }
+  .terms-section { margin-bottom: 2.25rem; }
+  .terms-section h3 { font-size: 1.2rem; color: var(--charcoal); margin-bottom: .85rem; }
+  .terms-section p, .terms-section li { font-size: .92rem; color: var(--mid); line-height: 1.8; margin-bottom: .45rem; }
+  .terms-section ul { padding-left: 1.4rem; }
+  .policy-box { background: var(--sand); border-left: 4px solid var(--coral); border-radius: 0 10px 10px 0; padding: 1.1rem 1.25rem; margin: .85rem 0; }
+  .policy-box p { font-size: .88rem; color: var(--charcoal); margin: 0; font-weight: 600; }
+
+  /* ── SUCCESS ── */
+  .success-page { text-align: center; max-width: 520px; margin: 0 auto; padding: 80px 2rem; }
+  .success-icon { font-size: 4rem; margin-bottom: 1.25rem; }
+  .success-page h2 { font-size: 2rem; color: var(--charcoal); margin-bottom: .65rem; }
+  .success-page p { color: var(--mid); margin-bottom: 1.75rem; }
+  .confirmation-card { background: var(--sand); border-radius: var(--radius); padding: 1.35rem; text-align: left; margin: 1.25rem 0; }
+
+  /* ── FOOTER ── */
+  footer { background: var(--charcoal); color: var(--white); padding: 3rem 5vw 1.5rem; }
+  .footer-grid { display: grid; grid-template-columns: 1.5fr 1fr 1fr 1fr; gap: 2rem; margin-bottom: 2rem; }
+  .footer-brand .brand-name { font-family: 'Cormorant Garamond', serif; font-size: 1.25rem; color: var(--sunny-lt); margin-bottom: .4rem; }
+  .footer-brand p { font-size: .83rem; color: rgba(255,255,255,.45); line-height: 1.65; }
+  .footer-col h4 { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; color: rgba(255,255,255,.35); margin-bottom: .85rem; }
+  .footer-col a { display: block; font-size: .85rem; color: rgba(255,255,255,.55); margin-bottom: .45rem; cursor: pointer; transition: color var(--transition); }
+  .footer-col a:hover { color: var(--sunny-lt); }
+  .footer-bottom { border-top: 1px solid rgba(255,255,255,.08); padding-top: 1.1rem; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: .5rem; }
+  .footer-bottom p { font-size: .75rem; color: rgba(255,255,255,.35); }
+
+  /* ── NOTIFICATION ── */
+  .notification {
+    position: fixed; bottom: 24px; right: 24px; z-index: 3000;
+    background: var(--mint); color: var(--white);
+    padding: 1rem 1.5rem; border-radius: 12px;
+    font-size: .88rem; font-weight: 600;
+    box-shadow: var(--shadow-lg);
+    transform: translateX(150%); transition: transform .4s cubic-bezier(.4,0,.2,1);
+    display: flex; align-items: center; gap: .65rem;
+    max-width: 300px;
+  }
+  .notification.show { transform: translateX(0); }
+  .notification.error { background: #C94E2A; }
+
+  /* ── INSTAPAY SECTION ── */
+  .instapay-box {
+    background: linear-gradient(135deg, var(--mint) 0%, #37906E 100%);
+    border-radius: var(--radius); padding: 1.5rem;
+    color: var(--white);
+  }
+  .instapay-box h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--sunny-lt); margin-bottom: .5rem; }
+  .instapay-box p { font-size: .83rem; opacity: .85; line-height: 1.6; margin-bottom: .75rem; }
+  .ipa-address { 
+    background: rgba(255,255,255,.2); border-radius: 8px; padding: .75rem 1rem;
+    font-size: 1.05rem; font-weight: 700; letter-spacing: .02em;
+    margin: .5rem 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 900px) {
+    .booking-layout, .checkout-layout, .about-layout, .contact-layout { grid-template-columns: 1fr; }
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+    .booking-summary, .about-photo-wrap { position: static; }
+    .about-photo { aspect-ratio: 16/9; }
+  }
+  @media (max-width: 640px) {
+    .nav-links { display: none; }
+    .nav-links.open {
+      display: flex; flex-direction: column;
+      position: fixed; top: 70px; left: 0; right: 0;
+      background: var(--bg); padding: 1.25rem 2rem;
+      gap: 1.1rem; border-bottom: 1px solid var(--border); z-index: 998;
+    }
+    .hamburger { display: flex; }
+    .hero-stats { gap: 1.5rem; flex-wrap: wrap; }
+    .footer-grid { grid-template-columns: 1fr; }
+    .slots-grid { grid-template-columns: repeat(2, 1fr); }
+    section { padding: 55px 5vw; }
+    .payment-methods { grid-template-columns: 1fr; }
+    .option-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav id="mainNav">
+  <div class="nav-logo">Coach <span>Hala</span> El Shahawy</div>
+  <div class="nav-links" id="navLinks">
+    <a onclick="showPage('home')" class="active" data-page="home">Home</a>
+    <a onclick="showPage('about')" data-page="about">About</a>
+    <a onclick="showPage('services')" data-page="services">Services</a>
+    <a onclick="showPage('contact')" data-page="contact">Contact</a>
+    <a onclick="showPage('terms')" data-page="terms">Policies</a>
+    <a onclick="showPage('booking')" class="nav-cta" data-page="booking">✦ Book a Session</a>
+  </div>
+  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+    <span></span><span></span><span></span>
+  </div>
+</nav>
+
+<!-- ═══════ HOME ═══════ -->
+<div id="page-home" class="page active">
+
+  <section class="hero" style="padding-top:120px">
+    <div class="hero-blob1"></div>
+    <div class="hero-blob2"></div>
+    <div class="hero-blob3"></div>
+    <div class="hero-content">
+      <div class="hero-badge">✦ ICF Accredited Certified Life Coach</div>
+      <h1>
+        <em>Empowering</em> Your Journey<br>
+        <strong>to Clarity, Purpose &amp; Growth</strong>
+      </h1>
+      <p class="hero-tag">Personal coaching rooted in wisdom, presence, and lasting transformation.</p>
+      <div class="hero-actions">
+        <button class="btn-primary" onclick="showPage('booking')">✦ Book Your Session</button>
+        <button class="btn-outline" onclick="showPage('about')">Meet Coach Hala</button>
+      </div>
+      <div class="hero-stats">
+        <div>
+          <div class="stat-num">200+</div>
+          <div class="stat-label">Clients Served</div>
+        </div>
+        <div>
+          <div class="stat-num">ICF</div>
+          <div class="stat-label">Accredited Provider</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <div class="icf-strip">
+    <div class="icf-badge">
+      <div class="icf-logo">ICF</div>
+      <div class="icf-text">
+        <strong>ICF-Accredited Provider</strong>
+        <span>International Coaching Federation</span>
+      </div>
+    </div>
+    <div class="icf-badge">
+      <div class="icf-logo" style="background:var(--coral)">WCS</div>
+      <div class="icf-text">
+        <strong>Wisdom Coaching School</strong>
+        <span>Certified Graduate</span>
+      </div>
+    </div>
+    <div class="icf-badge">
+      <div class="icf-logo" style="background:var(--mint)">🔒</div>
+      <div class="icf-text">
+        <strong>Secure &amp; Confidential</strong>
+        <span>All sessions fully private</span>
+      </div>
+    </div>
+  </div>
+
+  <section style="background:var(--white)">
+    <div class="section-eyebrow center">What I Offer</div>
+    <h2 class="section-title center">Coaching Specialties</h2>
+    <p class="section-subtitle center">Tailored coaching journeys for every season of life — whether you're navigating a transition, seeking clarity, or ready to lead.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🎯</div>
+        <h3>Career &amp; Leadership</h3>
+        <p>Navigate transitions, build workplace confidence, and grow into the leader you're meant to be.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌱</div>
+        <h3>Personal Growth &amp; Mindset</h3>
+        <p>Overcome limiting beliefs, build resilience, and set goals that align with who you truly are.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">💬</div>
+        <h3>Relationship &amp; Communication</h3>
+        <p>Improve your interpersonal dynamics, establish healthy boundaries, and communicate with intention.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚖️</div>
+        <h3>Well-being &amp; Work-Life Balance</h3>
+        <p>Manage stress, recover from burnout, and create a life that feels truly balanced and fulfilling.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌟</div>
+        <h3>Youth &amp; Transition Coaching</h3>
+        <p>Supporting young adults through major life decisions, identity shifts, and big-picture direction.</p>
+      </div>
+      <div class="service-card" style="border-style:dashed;background:rgba(232,97,58,.02)">
+        <div class="service-icon" style="background:var(--coral);color:var(--white)">→</div>
+        <h3 style="color:var(--coral)">Ready to begin?</h3>
+        <p>Every transformation starts with a single conversation. Book your session today.</p>
+        <br>
+        <button class="btn-book" onclick="showPage('booking')">Book Now →</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRICING TEASER -->
+  <section style="background:var(--sand)">
+    <div class="section-eyebrow center">Transparent Pricing</div>
+    <h2 class="section-title center">Sessions &amp; Bundles</h2>
+    <p class="section-subtitle center">EGP 700/hour · Sessions up to 2.5 hours · Bundles save you more. All prices in Egyptian Pounds.</p>
+    <div class="pricing-grid">
+      <div class="price-card">
+        <div class="price-name">Discovery Session</div>
+        <div class="price-amount">700</div>
+        <div class="price-period">EGP · 1 Hour</div>
+        <div class="price-desc">A focused single session to explore what coaching looks like for you. In-Person or Zoom.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('session-1hr')">Book Now</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Extended Session</div>
+        <div class="price-amount">1,050</div>
+        <div class="price-period">EGP · 1.5 Hours</div>
+        <div class="price-desc">A deeper single session for those who want more time to explore and reflect.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('session-1.5hr')">Book Now</button>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Best Value</div>
+        <div class="price-name">Momentum Package</div>
+        <div class="price-amount">3,800</div>
+        <div class="price-period">EGP · 6 Sessions × 1 Hour</div>
+        <div class="price-savings">Save EGP 400</div>
+        <div class="price-desc">Six focused sessions — build real momentum and lasting habits.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('momentum')">Book Now</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Transformation Package</div>
+        <div class="price-amount">6,720</div>
+        <div class="price-period">EGP · 10 Sessions × 1 Hour</div>
+        <div class="price-savings">Save EGP 1,280</div>
+        <div class="price-desc">The complete journey — ten sessions for deep, lasting change.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('transformation')">Book Now</button>
+      </div>
+    </div>
+    <div style="text-align:center;margin-top:1.75rem">
+      <button class="btn-outline" style="border-color:var(--coral);color:var(--coral);border-radius:100px" onclick="showPage('services')">View All Packages →</button>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section style="background:var(--white)">
+    <div class="section-eyebrow center">Client Stories</div>
+    <h2 class="section-title center">What People Are Saying</h2>
+    <div class="testimonials-grid" style="margin-top:2rem">
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-quote">Working with Coach Hala completely shifted how I see myself at work. I went from dreading meetings to leading them with confidence.</p>
+        <div class="testimonial-author">
+          <div class="avatar" style="background:var(--violet)">SR</div>
+          <div>
+            <div class="testimonial-name">Sarah R.</div>
+            <div class="testimonial-role">Senior Manager, Cairo</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-quote">The Momentum Package was exactly what I needed. Six sessions that genuinely changed the way I approach every relationship in my life.</p>
+        <div class="testimonial-author">
+          <div class="avatar" style="background:var(--coral)">KM</div>
+          <div>
+            <div class="testimonial-name">Karim M.</div>
+            <div class="testimonial-role">Entrepreneur, Alexandria</div>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial">
+        <div class="stars">★★★★★</div>
+        <p class="testimonial-quote">I was burning out and didn't know it. Hala helped me not just recover, but redesign a life I actually love. Worth every pound.</p>
+        <div class="testimonial-author">
+          <div class="avatar" style="background:var(--mint)">NA</div>
+          <div>
+            <div class="testimonial-name">Nour A.</div>
+            <div class="testimonial-role">Marketing Director, Cairo</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /home -->
+
+
+<!-- ═══════ ABOUT ═══════ -->
+<div id="page-about" class="page">
+  <div style="height:70px"></div>
+  <section>
+    <div class="about-layout">
+      <div class="about-photo-wrap">
+        <div class="about-photo">
+          <div class="coach-initials">HE</div>
+          <div class="coach-name-photo">Coach Hala El Shahawy</div>
+        </div>
+        <div style="margin-top:1.25rem">
+          <div class="icf-badge" style="width:100%;justify-content:center">
+            <div class="icf-logo">ICF</div>
+            <div class="icf-text">
+              <strong>ICF-Accredited Provider</strong>
+              <span>Wisdom Coaching School</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-eyebrow">My Story</div>
+        <h1 class="section-title" style="font-size:2.5rem">Hala El Shahawy</h1>
+        <p style="font-family:'Cormorant Garamond',serif;font-size:1.15rem;font-style:italic;color:var(--coral);margin-bottom:1.5rem">Certified Life Coach · ICF-Accredited Provider</p>
+        <p style="color:var(--mid);line-height:1.8;margin-bottom:1rem">I believe that every person carries within them the clarity, wisdom, and strength they are searching for. My role as a coach is not to give you answers — it's to create the space where you can hear your own.</p>
+        <p style="color:var(--mid);line-height:1.8;margin-bottom:1rem">Trained and certified through Wisdom Coaching School, an ICF-Accredited Provider, I bring a rigorous, evidence-based approach to coaching that is also deeply human — attuned to the cultural realities, pressures, and dreams of people in Egypt and the Arab world.</p>
+        <p style="color:var(--mid);line-height:1.8;margin-bottom:2rem">Over 200+ client journeys, I've walked alongside professionals navigating career crossroads, individuals rebuilding from burnout, young adults finding their footing, and people learning to truly communicate. Each story is unique. Each transformation is real.</p>
+
+        <h3 style="font-size:1.25rem;color:var(--charcoal);margin-bottom:.5rem">My Coaching Philosophy</h3>
+        <ul class="philosophy-list">
+          <li>Coaching is a partnership — you are the expert on your own life.</li>
+          <li>Lasting change comes from insight, not advice.</li>
+          <li>Your pace is the right pace — there's no rush in real growth.</li>
+          <li>Honesty, confidentiality, and deep respect are non-negotiable.</li>
+          <li>Every session should leave you more resourceful than when you arrived.</li>
+        </ul>
+
+        <h3 style="font-size:1.25rem;color:var(--charcoal);margin:.5rem 0">Credentials</h3>
+        <div style="background:var(--sand);border-radius:var(--radius);padding:1.35rem;margin-top:1rem">
+          <div style="display:flex;align-items:center;gap:.85rem;margin-bottom:1rem">
+            <div class="icf-logo" style="flex-shrink:0">ICF</div>
+            <div>
+              <strong style="display:block;color:var(--charcoal)">ICF-Accredited Provider Certification</strong>
+              <span style="font-size:.82rem;color:var(--mid)">International Coaching Federation — the global gold standard in professional coaching.</span>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:.85rem">
+            <div class="icf-logo" style="background:var(--coral);flex-shrink:0">WCS</div>
+            <div>
+              <strong style="display:block;color:var(--charcoal)">Wisdom Coaching School Graduate</strong>
+              <span style="font-size:.82rem;color:var(--mid)">Completed rigorous ICF-aligned training in life coaching methodology and ethics.</span>
+            </div>
+          </div>
+        </div>
+        <div style="margin-top:2rem">
+          <button class="btn-primary" onclick="showPage('booking')">Book a Session with Hala →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════ SERVICES ═══════ -->
+<div id="page-services" class="page">
+  <div style="height:70px"></div>
+  <section>
+    <div class="section-eyebrow center">All Services</div>
+    <h1 class="section-title center">Coaching Services &amp; Pricing</h1>
+    <p class="section-subtitle center">EGP 700/hour · Sessions available from 1 to 2.5 hours · Bundles offer real savings and committed growth.</p>
+
+    <!-- INDIVIDUAL SESSIONS -->
+    <h3 style="font-size:1.35rem;color:var(--charcoal);margin-bottom:1.25rem">Individual Sessions</h3>
+    <div class="pricing-grid" style="margin-bottom:3rem">
+      <div class="price-card">
+        <div class="price-name">Discovery Session</div>
+        <div class="price-amount">700</div>
+        <div class="price-period">EGP · 1 Hour</div>
+        <div class="price-desc">Perfect for exploring coaching or addressing one focused goal. In-Person or Zoom.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('session-1hr')">Book This Session</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Extended Session</div>
+        <div class="price-amount">1,050</div>
+        <div class="price-period">EGP · 1.5 Hours</div>
+        <div class="price-desc">More room to explore. Ideal when one hour isn't quite enough.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('session-1.5hr')">Book This Session</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Deep Dive Session</div>
+        <div class="price-amount">1,400</div>
+        <div class="price-period">EGP · 2 Hours</div>
+        <div class="price-desc">An extended immersive session for complex challenges or major life transitions.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('session-2hr')">Book This Session</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Intensive Session</div>
+        <div class="price-amount">1,750</div>
+        <div class="price-period">EGP · 2.5 Hours (Max)</div>
+        <div class="price-desc">Our longest single session — for deep, concentrated breakthrough work.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('session-2.5hr')">Book This Session</button>
+      </div>
+    </div>
+
+    <!-- BUNDLES -->
+    <h3 style="font-size:1.35rem;color:var(--charcoal);margin-bottom:.5rem">Coaching Bundles</h3>
+    <p style="color:var(--mid);font-size:.92rem;margin-bottom:1.35rem">Commit to your growth and save. Bundles are paid upfront; sessions are scheduled at your pace.</p>
+    <div class="pricing-grid" style="margin-bottom:3rem">
+      <div class="price-card">
+        <div class="price-name">Starter Pack</div>
+        <div class="price-amount">2,000</div>
+        <div class="price-period">EGP · 3 Sessions × 1 Hour</div>
+        <div class="price-savings">Save EGP 100</div>
+        <div class="price-desc">Three sessions — a gentle commitment to get things moving.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('starter')">Purchase Bundle</button>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge">Best Value</div>
+        <div class="price-name">Momentum Package</div>
+        <div class="price-amount">3,800</div>
+        <div class="price-period">EGP · 6 Sessions × 1 Hour</div>
+        <div class="price-savings">Save EGP 400</div>
+        <div class="price-desc">Six focused sessions — build real momentum and make habits stick.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('momentum')">Purchase Bundle</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Transformation Package</div>
+        <div class="price-amount">6,720</div>
+        <div class="price-period">EGP · 10 Sessions × 1 Hour</div>
+        <div class="price-savings">Save EGP 1,280</div>
+        <div class="price-desc">Ten sessions — the full coaching journey for profound, lasting transformation.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('transformation')">Purchase Bundle</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Deep Dive Bundle</div>
+        <div class="price-amount">5,040</div>
+        <div class="price-period">EGP · 4 Sessions × 1.5 Hours</div>
+        <div class="price-savings">Save EGP 160</div>
+        <div class="price-desc">Four extended sessions — depth over frequency for reflective people.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('deepdive')">Purchase Bundle</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Intensive Bundle</div>
+        <div class="price-amount">5,460</div>
+        <div class="price-period">EGP · 4 Sessions × 2 Hours</div>
+        <div class="price-savings">Save EGP 140</div>
+        <div class="price-desc">Four immersive sessions — for those who prefer deep dives less frequently.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('intensive')">Purchase Bundle</button>
+      </div>
+      <div class="price-card">
+        <div class="price-name">Annual Journey</div>
+        <div class="price-amount">16,000</div>
+        <div class="price-period">EGP · 24 Sessions × 1 Hour</div>
+        <div class="price-savings">Save EGP 800</div>
+        <div class="price-desc">Two sessions per month for a full year — the ultimate long-term commitment.</div>
+        <button class="btn-book" onclick="selectServiceAndBook('annual')">Purchase Bundle</button>
+      </div>
+    </div>
+
+    <!-- SPECIALTIES -->
+    <h3 style="font-size:1.35rem;color:var(--charcoal);margin-bottom:1.25rem">Coaching Specialties</h3>
+    <div class="services-grid">
+      <div class="service-card">
+        <div class="service-icon">🎯</div>
+        <h3>Career &amp; Leadership Coaching</h3>
+        <p>Navigating career transitions, building workplace confidence, developing leadership presence and influence.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌱</div>
+        <h3>Personal Growth &amp; Mindset</h3>
+        <p>Overcoming limiting beliefs, building resilience, establishing meaningful goals that reflect your values.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">💬</div>
+        <h3>Relationship &amp; Communication</h3>
+        <p>Improving interpersonal dynamics, setting clear boundaries, communicating needs with confidence.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">⚖️</div>
+        <h3>Well-being &amp; Work-Life Balance</h3>
+        <p>Stress management, burnout recovery, creating holistic balance across all domains of life.</p>
+      </div>
+      <div class="service-card">
+        <div class="service-icon">🌟</div>
+        <h3>Youth &amp; Transition Coaching</h3>
+        <p>Supporting young adults through major life decisions, identity exploration, and career direction.</p>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════ BOOKING ═══════ -->
+<div id="page-booking" class="page">
+  <div style="height:70px"></div>
+  <section>
+    <div class="section-eyebrow">Schedule Your Session</div>
+    <h1 class="section-title">Book a Session</h1>
+    <p class="section-subtitle">All times shown in Cairo Local Time (EET/EEST). Unavailable slots are crossed out.</p>
+
+    <div class="booking-layout">
+      <div>
+        <!-- Step 1 -->
+        <div class="booking-steps">
+          <div class="step-header">
+            <div class="step-num" id="s1num">1</div>
+            <div class="step-title">Select Your Service</div>
+          </div>
+          <div class="step-content">
+            <div class="option-grid">
+              <button class="option-btn" onclick="selectOption('service','session-1hr',this,'Discovery Session (1hr)','EGP 700',700)">
+                <span class="opt-label">Discovery</span><span class="opt-sub">1 Hour · EGP 700</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('service','session-1.5hr',this,'Extended Session (1.5hr)','EGP 1,050',1050)">
+                <span class="opt-label">Extended</span><span class="opt-sub">1.5 Hours · EGP 1,050</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('service','session-2hr',this,'Deep Dive (2hr)','EGP 1,400',1400)">
+                <span class="opt-label">Deep Dive</span><span class="opt-sub">2 Hours · EGP 1,400</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('service','session-2.5hr',this,'Intensive (2.5hr)','EGP 1,750',1750)">
+                <span class="opt-label">Intensive</span><span class="opt-sub">2.5 Hours · EGP 1,750</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('service','starter',this,'Starter Pack (3×1hr)','EGP 2,000',2000)">
+                <span class="opt-label">Starter Pack</span><span class="opt-sub">3×1hr · EGP 2,000</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('service','momentum',this,'Momentum (6×1hr)','EGP 3,800',3800)">
+                <span class="opt-label">Momentum</span><span class="opt-sub">6×1hr · EGP 3,800</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('service','transformation',this,'Transformation (10×1hr)','EGP 6,720',6720)">
+                <span class="opt-label">Transformation</span><span class="opt-sub">10×1hr · EGP 6,720</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('service','deepdive',this,'Deep Dive Bundle (4×1.5hr)','EGP 5,040',5040)">
+                <span class="opt-label">Deep Bundle</span><span class="opt-sub">4×1.5hr · EGP 5,040</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('service','intensive',this,'Intensive Bundle (4×2hr)','EGP 5,460',5460)">
+                <span class="opt-label">Intensive Bundle</span><span class="opt-sub">4×2hr · EGP 5,460</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('service','annual',this,'Annual Journey (24×1hr)','EGP 16,000',16000)">
+                <span class="opt-label">Annual Journey</span><span class="opt-sub">24×1hr · EGP 16,000</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="booking-steps" style="margin-top:1rem">
+          <div class="step-header">
+            <div class="step-num" id="s2num">2</div>
+            <div class="step-title">Session Format</div>
+          </div>
+          <div class="step-content">
+            <div class="option-grid">
+              <button class="option-btn" onclick="selectOption('format','zoom',this,'Zoom Call','Online',0)">
+                <span class="opt-label">📹 Zoom Call</span><span class="opt-sub">Online — anywhere you are</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('format','inperson',this,'In-Person','Cairo',0)">
+                <span class="opt-label">🏢 In-Person</span><span class="opt-sub">Cairo — location shared on confirmation</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="booking-steps" style="margin-top:1rem">
+          <div class="step-header">
+            <div class="step-num" id="s3num">3</div>
+            <div class="step-title">Coaching Specialty</div>
+          </div>
+          <div class="step-content">
+            <div class="option-grid">
+              <button class="option-btn" onclick="selectOption('specialty','career',this,'Career & Leadership','',0)">
+                <span class="opt-label">🎯 Career &amp; Leadership</span><span class="opt-sub">Transitions, confidence, growth</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('specialty','mindset',this,'Personal Growth & Mindset','',0)">
+                <span class="opt-label">🌱 Growth &amp; Mindset</span><span class="opt-sub">Beliefs, resilience, goals</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('specialty','relationship',this,'Relationship & Communication','',0)">
+                <span class="opt-label">💬 Relationships</span><span class="opt-sub">Dynamics, boundaries</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('specialty','wellbeing',this,'Well-being & Balance','',0)">
+                <span class="opt-label">⚖️ Well-being</span><span class="opt-sub">Stress, burnout, balance</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('specialty','youth',this,'Youth & Transition','',0)">
+                <span class="opt-label">🌟 Youth &amp; Transition</span><span class="opt-sub">Young adults, big decisions</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Calendar -->
+        <div class="booking-steps" style="margin-top:1rem">
+          <div class="step-header">
+            <div class="step-num" id="s4num">4</div>
+            <div class="step-title">Pick a Date &amp; Time</div>
+          </div>
+          <div class="step-content">
+            <div class="cal-header">
+              <button class="cal-nav" onclick="changeMonth(-1)">‹</button>
+              <div class="cal-month" id="calMonth"></div>
+              <button class="cal-nav" onclick="changeMonth(1)">›</button>
+            </div>
+            <div class="cal-grid" id="calGrid"></div>
+            <div id="timeSlotSection" style="display:none;margin-top:1.4rem">
+              <div style="font-size:.83rem;font-weight:700;color:var(--charcoal);margin-bottom:.5rem">
+                Available Times — <span id="selectedDateLabel"></span>
+              </div>
+              <div class="slots-grid" id="slotsGrid"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar summary -->
+      <div>
+        <div class="booking-summary">
+          <div class="summary-title">Session Summary</div>
+          <div class="summary-row"><span class="label">Service</span><span class="val" id="sum-service">—</span></div>
+          <div class="summary-row"><span class="label">Format</span><span class="val" id="sum-format">—</span></div>
+          <div class="summary-row"><span class="label">Specialty</span><span class="val" id="sum-specialty">—</span></div>
+          <div class="summary-row"><span class="label">Date &amp; Time</span><span class="val" id="sum-datetime">—</span></div>
+          <div class="summary-row"><span class="label">Timezone</span><span class="val">Cairo (EET/EEST)</span></div>
+
+          <div class="summary-total">
+            <div class="summary-row" style="border:none;padding:.15rem 0">
+              <span class="label">Total</span>
+              <span class="val" id="sum-price" style="font-size:1.45rem;font-family:'Cormorant Garamond',serif;color:var(--coral)">—</span>
+            </div>
+          </div>
+
+          <div style="font-size:.8rem;font-weight:600;color:var(--charcoal);margin-bottom:.4rem">Payment Option:</div>
+          <div class="deposit-toggle">
+            <button class="dep-btn active" id="depFull" onclick="selectDeposit('full')">Pay in Full</button>
+            <button class="dep-btn" id="depHalf" onclick="selectDeposit('half')">50% Deposit</button>
+          </div>
+          <div id="depositInfo" style="font-size:.76rem;color:var(--mid);margin-bottom:.85rem;display:none;background:var(--sand);padding:.6rem .75rem;border-radius:8px">
+            Pay <strong id="depositAmt"></strong> now. Remaining balance due 24 hours before your session.
+          </div>
+
+          <button class="pay-btn" id="proceedBtn" onclick="proceedToCheckout()" disabled>
+            Continue to Checkout →
+          </button>
+          <div style="margin-top:.85rem;padding:.85rem;background:var(--sand);border-radius:8px;font-size:.76rem;color:var(--mid)">
+            🔒 Your slot is reserved upon payment. Booked slots become unavailable in real time.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════ CHECKOUT ═══════ -->
+<div id="page-checkout" class="page">
+  <div style="height:70px"></div>
+  <section>
+    <div class="section-eyebrow">Secure Checkout</div>
+    <h1 class="section-title">Complete Your Booking</h1>
+
+    <div class="checkout-layout">
+      <div>
+        <!-- Client details -->
+        <div class="form-section">
+          <div class="form-section-title">Your Details</div>
+          <div class="form-grid">
+            <div class="form-group">
+              <label>Full Name *</label>
+              <input type="text" id="clientName" placeholder="Your full name">
+            </div>
+            <div class="form-group">
+              <label>Email Address *</label>
+              <input type="email" id="clientEmail" placeholder="your@email.com">
+            </div>
+            <div class="form-group">
+              <label>Phone / WhatsApp *</label>
+              <input type="tel" id="clientPhone" placeholder="+20 1XX XXX XXXX">
+            </div>
+            <div class="form-group">
+              <label>Emergency Contact (Optional)</label>
+              <input type="tel" id="clientEmergency" placeholder="Emergency contact">
+            </div>
+          </div>
+          <div class="form-group" style="margin-top:.85rem">
+            <label>Anything you'd like Coach Hala to know before your session?</label>
+            <textarea id="clientNotes" rows="3" placeholder="Goals, concerns, what you'd like to explore..." style="resize:vertical"></textarea>
+          </div>
+        </div>
+
+        <!-- Payment Method -->
+        <div class="form-section">
+          <div class="form-section-title">Payment Method</div>
+          <div class="payment-methods">
+            <div class="pay-method selected" id="pm-card" onclick="selectPayMethod('card')">
+              <div class="pay-method-icon">💳</div>
+              <div class="pay-method-label">Credit / Debit Card</div>
+              <div class="pay-method-sub">Visa · Mastercard</div>
+            </div>
+            <div class="pay-method" id="pm-instapay" onclick="selectPayMethod('instapay')">
+              <div class="pay-method-icon">📱</div>
+              <div class="pay-method-label">InstaPay</div>
+              <div class="pay-method-sub">Instant transfer · EGP only</div>
+            </div>
+          </div>
+
+          <div id="card-fields">
+            <div class="form-grid">
+              <div class="form-group" style="grid-column:1/-1">
+                <label>Card Number *</label>
+                <input type="text" id="cardNum" placeholder="1234 5678 9012 3456" maxlength="19" oninput="formatCard(this)">
+              </div>
+              <div class="form-group">
+                <label>Expiry *</label>
+                <input type="text" id="cardExpiry" placeholder="MM / YY" maxlength="7" oninput="formatExpiry(this)">
+              </div>
+              <div class="form-group">
+                <label>CVV *</label>
+                <input type="text" id="cardCvv" placeholder="123" maxlength="3">
+              </div>
+            </div>
+          </div>
+
+          <div id="instapay-fields" style="display:none">
+            <div class="instapay-box">
+              <h4>📱 Pay via InstaPay</h4>
+              <p>Open your InstaPay app and send the payment to this phone number:</p>
+              <div class="ipa-address" id="ipaAddress">01013996744</div>
+              <p style="margin-top:.5rem;font-size:.78rem">⚠ Enter your own InstaPay phone number below so Hala can match your payment.</p>
+              <div class="form-group" style="margin-top:.75rem">
+                <label style="color:rgba(255,255,255,.8)">Your InstaPay IPA / Phone Number *</label>
+                <input type="text" id="instapayRef" placeholder="e.g. 010XXXXXXXX" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:white">
+              </div>
+              <p style="margin-top:.6rem;font-size:.76rem;opacity:.75">After sending, click "Complete Booking" — your slot will be held for 2 hours while payment is manually verified.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Order summary -->
+        <div class="form-section">
+          <div class="form-section-title">Order Summary</div>
+          <div class="summary-row"><span class="label">Service</span><span class="val" id="co-service">—</span></div>
+          <div class="summary-row"><span class="label">Date &amp; Time</span><span class="val" id="co-datetime">—</span></div>
+          <div class="summary-row"><span class="label">Format</span><span class="val" id="co-format">—</span></div>
+          <div class="summary-row" style="font-size:1rem;font-weight:700;border-top:2px solid var(--coral);padding-top:.7rem;margin-top:.2rem">
+            <span style="color:var(--charcoal)">Amount Due Now</span>
+            <span id="co-amount" style="color:var(--coral);font-family:'Cormorant Garamond',serif;font-size:1.5rem">—</span>
+          </div>
+          <div id="co-remaining-row" style="display:none" class="summary-row">
+            <span class="label" style="color:var(--violet)">⚠ Balance Due Later</span>
+            <span class="val" id="co-remaining" style="color:var(--violet)">—</span>
+          </div>
+        </div>
+
+        <!-- Terms -->
+        <div class="form-section">
+          <div class="form-section-title">Terms &amp; Agreement</div>
+          <div style="background:var(--sand);border-radius:10px;padding:.9rem 1rem;margin-bottom:.85rem;font-size:.83rem;color:var(--mid);line-height:1.75">
+            <strong style="color:var(--charcoal);display:block;margin-bottom:.35rem">Cancellation Policy Summary</strong>
+            • More than 24 hours before: Full refund or reschedule<br>
+            • 2–24 hours before: Reschedule only, no refund<br>
+            • Within 30 min or no-show: 50% of fee retained by coach
+          </div>
+          <div class="terms-check">
+            <input type="checkbox" id="termsCheck" onchange="updatePayBtn()">
+            <label for="termsCheck">I have read and agree to the <a onclick="showPage('terms')">Cancellation Policy and Terms of Service</a>. I understand the no-show policy applies to all bookings.</label>
+          </div>
+          <button class="pay-btn" id="payBtn" onclick="completePayment()" disabled>🔒 Complete Booking</button>
+          <div class="secure-badges">
+            <div class="secure-badge">🔒 SSL Secured</div>
+            <div class="secure-badge">✅ Encrypted</div>
+            <div class="secure-badge">🛡 Confidential</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right sidebar -->
+      <div>
+        <div class="booking-summary" style="top:82px">
+          <div class="summary-title">Booking Summary</div>
+          <div class="summary-row"><span class="label">Service</span><span class="val" id="cos-service">—</span></div>
+          <div class="summary-row"><span class="label">Specialty</span><span class="val" id="cos-specialty">—</span></div>
+          <div class="summary-row"><span class="label">Format</span><span class="val" id="cos-format">—</span></div>
+          <div class="summary-row"><span class="label">Date &amp; Time</span><span class="val" id="cos-datetime">—</span></div>
+          <div class="summary-row"><span class="label">Payment</span><span class="val" id="cos-payment">—</span></div>
+          <div class="summary-total" style="margin-top:.85rem">
+            <div class="summary-row" style="border:none;padding:.15rem 0">
+              <span class="label">Due Today</span>
+              <span class="val" id="cos-amount" style="font-size:1.4rem;font-family:'Cormorant Garamond',serif;color:var(--coral)">—</span>
+            </div>
+          </div>
+          <div style="margin-top:.85rem;font-size:.76rem;color:var(--mid);line-height:1.65;background:var(--sand);padding:.75rem;border-radius:8px">
+            ⏳ Your booking request will be sent to Coach Hala for review. <strong>She will reply to your email directly to confirm.</strong> Your session is not confirmed until you receive her reply.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════ SUCCESS ═══════ -->
+<div id="page-success" class="page">
+  <div style="height:70px"></div>
+  <section>
+    <div class="success-page">
+      <div class="success-icon">⏳</div>
+      <h2>Request Sent — Pending Confirmation</h2>
+      <p>Thank you, <strong id="successName"></strong>! Your booking request has been sent to Coach Hala. She will review it and <strong>reply directly to your email</strong> at <strong id="successEmail"></strong> to confirm or reschedule within 24 hours. <strong>Your session is not confirmed until you receive that email.</strong></p>
+
+      <div class="confirmation-card">
+        <div class="section-eyebrow" style="margin-bottom:.65rem">Your Booking Details</div>
+        <div class="summary-row"><span class="label">Service</span><span class="val" id="suc-service"></span></div>
+        <div class="summary-row"><span class="label">Format</span><span class="val" id="suc-format"></span></div>
+        <div class="summary-row"><span class="label">Specialty</span><span class="val" id="suc-specialty"></span></div>
+        <div class="summary-row"><span class="label">Date &amp; Time</span><span class="val" id="suc-datetime"></span></div>
+        <div class="summary-row" style="border:none"><span class="label">Amount</span><span class="val" id="suc-amount" style="color:var(--coral);font-size:1.1rem;font-family:'Cormorant Garamond',serif"></span></div>
+      </div>
+
+      <div style="background:var(--sand);border-radius:var(--radius);padding:1.1rem;text-align:left;margin:1.25rem 0;font-size:.85rem;color:var(--mid);line-height:1.85">
+        <strong style="color:var(--charcoal);display:block;margin-bottom:.5rem">📧 What happens next?</strong>
+        <span style="color:var(--coral);font-weight:700">1. ⏳ Pending</span> — Coach Hala reviews your request<br>
+        <span style="color:var(--mint);font-weight:700">2. ✅ Confirmed</span> — She replies to your email directly to confirm, with session details (Zoom link or location)<br>
+        <span style="color:var(--violet);font-weight:700">3. 🔔 Reminder</span> — You'll receive a WhatsApp or email reminder 24 hours before your session<br><br>
+        <strong style="color:var(--coral-dk)">⚠ Your session is NOT confirmed until you receive Coach Hala's reply.</strong>
+      </div>
+
+      <button class="btn-primary" onclick="showPage('home')" style="margin-right:.65rem">Back to Home</button>
+      <button class="btn-outline" style="border-color:var(--coral);color:var(--coral);border-radius:100px" onclick="showPage('booking')">Book Another Session</button>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════ CONTACT ═══════ -->
+<div id="page-contact" class="page">
+  <div style="height:70px"></div>
+  <section>
+    <div class="section-eyebrow">Get in Touch</div>
+    <h1 class="section-title">Let's Connect</h1>
+    <p class="section-subtitle">Have questions before booking? Reach out — I'd love to hear from you.</p>
+
+    <div class="contact-layout">
+      <div class="contact-info">
+        <h3>Coach Hala El Shahawy</h3>
+        <p>Certified Life Coach · Cairo, Egypt</p>
+        <div class="contact-detail">
+          <div class="contact-icon">📧</div>
+          <div class="contact-detail-text">
+            <strong>Email</strong><span>shahdaboelfotouh7@gmail.com</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">📱</div>
+          <div class="contact-detail-text">
+            <strong>Phone / WhatsApp</strong><span>+20 1XX XXX XXXX</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">📍</div>
+          <div class="contact-detail-text">
+            <strong>Location</strong><span>Cairo, Egypt (address shared upon booking)</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">🕐</div>
+          <div class="contact-detail-text">
+            <strong>Session Hours</strong><span>Sun–Thu: 9:00 AM – 7:00 PM Cairo Time</span>
+          </div>
+        </div>
+        <div class="contact-detail">
+          <div class="contact-icon">📱</div>
+          <div class="contact-detail-text">
+            <strong>InstaPay</strong><span>01013996744</span>
+          </div>
+        </div>
+        <div class="social-links">
+          <div class="social-link" title="Instagram">📸</div>
+          <div class="social-link" title="LinkedIn">💼</div>
+          <div class="social-link" title="WhatsApp">💬</div>
+          <div class="social-link" title="Facebook">📘</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="form-section">
+          <div class="form-section-title">Send a Message</div>
+          <div class="form-group" style="margin-bottom:.85rem">
+            <label>Your Name *</label>
+            <input type="text" id="contactName" placeholder="Your full name">
+          </div>
+          <div class="form-group" style="margin-bottom:.85rem">
+            <label>Email *</label>
+            <input type="email" id="contactEmail" placeholder="your@email.com">
+          </div>
+          <div class="form-group" style="margin-bottom:.85rem">
+            <label>Subject</label>
+            <input type="text" id="contactSubject" placeholder="What's on your mind?">
+          </div>
+          <div class="form-group" style="margin-bottom:1.25rem">
+            <label>Message *</label>
+            <textarea id="contactMessage" rows="5" placeholder="Tell me a bit about what you're looking for..." style="resize:vertical"></textarea>
+          </div>
+          <button class="pay-btn" onclick="sendContactForm()">Send Message →</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ═══════ TERMS ═══════ -->
+<div id="page-terms" class="page">
+  <div style="height:70px"></div>
+  <section>
+    <div class="section-eyebrow">Policies</div>
+    <h1 class="section-title">Terms, Policies &amp; Confidentiality</h1>
+    <p class="section-subtitle">Please read these carefully before booking. You'll agree to them at checkout.</p>
+
+    <div class="terms-content">
+      <div class="terms-section">
+        <h3>1. Cancellation &amp; Rescheduling Policy</h3>
+        <div class="policy-box"><p>⚠ All clients must explicitly agree to this policy before payment is processed.</p></div>
+        <ul>
+          <li><strong>More than 24 hours before the session:</strong> Full refund or free reschedule.</li>
+          <li><strong>2–24 hours before the session:</strong> Reschedule only — no monetary refund.</li>
+          <li><strong>Within 30 minutes OR no-show:</strong> Coach retains 50% of the total session fee. Remaining 50% refunded or credited at coach's discretion.</li>
+        </ul>
+        <p style="margin-top:.85rem">This policy applies to both full-payment and 50%-deposit bookings. Bundle sessions cancelled without adequate notice still consume one session from the bundle.</p>
+      </div>
+      <div class="terms-section">
+        <h3>2. Refund Policy</h3>
+        <p>Eligible refunds are processed within 5–10 business days to the original payment method. InstaPay refunds are sent to the registered IPA/phone number on file.</p>
+      </div>
+      <div class="terms-section">
+        <h3>3. Deposit &amp; Balance Payments</h3>
+        <p>Clients selecting the 50% deposit agree to pay the remaining balance at least 24 hours before the session. Unpaid balances result in session cancellation with no refund of the deposit. Reminder emails are sent 48 and 24 hours before the session.</p>
+      </div>
+      <div class="terms-section">
+        <h3>4. Confidentiality</h3>
+        <p>All information shared in sessions is strictly confidential. Coach Hala will not disclose any personal information to third parties without explicit written consent, except where required by law. Coaching is not a substitute for therapy or medical treatment.</p>
+      </div>
+      <div class="terms-section">
+        <h3>5. Session Conduct</h3>
+        <p>Sessions beginning late due to the client will end at the scheduled time and cannot be extended. Maximum session length is 2.5 hours regardless of format.</p>
+      </div>
+      <div class="terms-section">
+        <h3>6. Zoom Sessions</h3>
+        <p>Clients are responsible for a stable internet connection and a private environment. Recording sessions without mutual consent is prohibited.</p>
+      </div>
+      <div class="terms-section">
+        <h3>7. Privacy &amp; Data</h3>
+        <p>Personal data is collected solely for managing bookings and communications, stored securely, and never sold. Request deletion at any time: shahdaboelfotouh7@gmail.com</p>
+      </div>
+      <div style="margin-top:2rem;padding:1.35rem;background:var(--sand);border-radius:var(--radius);text-align:center">
+        <p style="font-size:.88rem;color:var(--mid);margin-bottom:.85rem">Questions about these policies? Don't hesitate to reach out.</p>
+        <button class="btn-primary" onclick="showPage('contact')">Contact Coach Hala</button>
+      </div>
+    </div>
+  </section>
+</div>
+
+
+<!-- ── FOOTER ── -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="brand-name">Coach Hala El Shahawy</div>
+      <p>Certified Life Coach · ICF-Accredited Provider<br>Cairo, Egypt</p>
+      <p style="margin-top:.6rem;font-size:.75rem;font-style:italic">"Empowering Your Journey to Clarity, Purpose, and Growth"</p>
+    </div>
+    <div class="footer-col">
+      <h4>Navigate</h4>
+      <a onclick="showPage('home')">Home</a>
+      <a onclick="showPage('about')">About</a>
+      <a onclick="showPage('services')">Services</a>
+      <a onclick="showPage('contact')">Contact</a>
+    </div>
+    <div class="footer-col">
+      <h4>Services</h4>
+      <a onclick="selectServiceAndBook('session-1hr')">Discovery (1hr)</a>
+      <a onclick="selectServiceAndBook('momentum')">Momentum Package</a>
+      <a onclick="selectServiceAndBook('transformation')">Transformation</a>
+      <a onclick="showPage('services')">All Services</a>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <a onclick="showPage('terms')">Terms &amp; Policies</a>
+      <a onclick="showPage('terms')">Cancellation Policy</a>
+      <a onclick="showPage('terms')">Confidentiality</a>
+      <a onclick="showPage('terms')">Privacy Policy</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2025 Coach Hala El Shahawy. All rights reserved.</p>
+    <p>ICF-Accredited · Wisdom Coaching School Certified</p>
+  </div>
+</footer>
+
+<!-- NOTIFICATION -->
+<div class="notification" id="notification">
+  <span id="notifIcon">✓</span>
+  <span id="notifMsg">Done</span>
+</div>
+
+<script>
+  // ── STATE ──
+  const booking = {
+    service: null, serviceName: '', servicePrice: '', priceRaw: 0,
+    format: null, formatName: '',
+    specialty: null, specialtyName: '',
+    date: null, dateKey: null, time: null,
+    deposit: 'full'
+  };
+
+  // Demo booked slots
+  const today = new Date();
+  const bookedSlots = {};
+  function addBooked(offset, times) {
+    const d = new Date(today); d.setDate(d.getDate() + offset);
+    bookedSlots[dayKey(d)] = times;
+  }
+  addBooked(3, ['10:00 AM','2:00 PM']);
+  addBooked(6, ['9:00 AM','11:00 AM','3:00 PM']);
+  addBooked(10, ['10:00 AM','11:00 AM','12:00 PM','4:00 PM']);
+
+  const allTimes = ['9:00 AM','10:00 AM','11:00 AM','12:00 PM','1:00 PM','2:00 PM','3:00 PM','4:00 PM','5:00 PM','6:00 PM'];
+
+  let calYear = today.getFullYear(), calMonth = today.getMonth();
+
+  // ── NAVIGATION ──
+  function showPage(page) {
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-' + page).classList.add('active');
+    document.querySelectorAll('.nav-links a[data-page]').forEach(a => {
+      a.classList.toggle('active', a.dataset.page === page);
+    });
+    document.getElementById('navLinks').classList.remove('open');
+    window.scrollTo(0, 0);
+  }
+  function toggleMenu() {
+    document.getElementById('navLinks').classList.toggle('open');
+  }
+
+  // ── BOOKING OPTIONS ──
+  function selectOption(type, val, btn, name, priceStr, amount) {
+    btn.closest('.option-grid').querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    booking[type] = val;
+    if (type === 'service') {
+      booking.serviceName = name; booking.servicePrice = priceStr; booking.priceRaw = amount;
+      document.getElementById('sum-service').textContent = name;
+      document.getElementById('sum-price').textContent = 'EGP ' + amount.toLocaleString();
+      updateDepositInfo();
+    } else if (type === 'format') {
+      booking.formatName = name;
+      document.getElementById('sum-format').textContent = name;
+    } else if (type === 'specialty') {
+      booking.specialtyName = name;
+      document.getElementById('sum-specialty').textContent = name;
+    }
+    checkProceed();
+  }
+
+  function selectDeposit(mode) {
+    booking.deposit = mode;
+    document.getElementById('depFull').classList.toggle('active', mode === 'full');
+    document.getElementById('depHalf').classList.toggle('active', mode === 'half');
+    updateDepositInfo();
+  }
+
+  function updateDepositInfo() {
+    const info = document.getElementById('depositInfo');
+    if (booking.deposit === 'half' && booking.priceRaw) {
+      const half = Math.ceil(booking.priceRaw / 2);
+      document.getElementById('depositAmt').textContent = 'EGP ' + half.toLocaleString();
+      info.style.display = 'block';
+    } else {
+      info.style.display = 'none';
+    }
+  }
+
+  function checkProceed() {
+    const ok = booking.service && booking.format && booking.specialty && booking.date && booking.time;
+    document.getElementById('proceedBtn').disabled = !ok;
+  }
+
+  function proceedToCheckout() {
+    const amtDue = booking.deposit === 'half' ? Math.ceil(booking.priceRaw / 2) : booking.priceRaw;
+    const dtStr = booking.date + ' at ' + booking.time;
+
+    document.getElementById('co-service').textContent = booking.serviceName;
+    document.getElementById('co-datetime').textContent = dtStr;
+    document.getElementById('co-format').textContent = booking.formatName;
+    document.getElementById('co-amount').textContent = 'EGP ' + amtDue.toLocaleString();
+
+    if (booking.deposit === 'half') {
+      const rem = booking.priceRaw - amtDue;
+      document.getElementById('co-remaining').textContent = 'EGP ' + rem.toLocaleString() + ' (due 24h before session)';
+      document.getElementById('co-remaining-row').style.display = 'flex';
+    } else {
+      document.getElementById('co-remaining-row').style.display = 'none';
+    }
+
+    document.getElementById('cos-service').textContent = booking.serviceName;
+    document.getElementById('cos-specialty').textContent = booking.specialtyName;
+    document.getElementById('cos-format').textContent = booking.formatName;
+    document.getElementById('cos-datetime').textContent = dtStr;
+    document.getElementById('cos-payment').textContent = booking.deposit === 'half' ? '50% Deposit' : 'Pay in Full';
+    document.getElementById('cos-amount').textContent = 'EGP ' + amtDue.toLocaleString();
+
+    showPage('checkout');
+  }
+
+  function updatePayBtn() {
+    document.getElementById('payBtn').disabled = !document.getElementById('termsCheck').checked;
+  }
+
+  // ── REAL BACKEND URL ──
+  const BACKEND = 'https://web-production-43aee.up.railway.app';
+
+  async function completePayment() {
+    const name     = document.getElementById('clientName').value.trim();
+    const email    = document.getElementById('clientEmail').value.trim();
+    const phone    = document.getElementById('clientPhone').value.trim();
+    const notes    = document.getElementById('clientNotes').value.trim();
+    const emergency= document.getElementById('clientEmergency').value.trim();
+    const payMethod= document.getElementById('pm-instapay').classList.contains('selected') ? 'InstaPay' : 'Card';
+    const ipaRef   = payMethod === 'InstaPay' ? (document.getElementById('instapayRef').value.trim()) : '';
+
+    if (!name || !email) { showNotification('Please fill in your name and email.', 'error'); return; }
+    if (!phone)          { showNotification('Please add your phone number.', 'error'); return; }
+
+    const paid      = booking.deposit === 'half' ? Math.ceil(booking.priceRaw/2) : booking.priceRaw;
+    const remaining = booking.deposit === 'half' ? (booking.priceRaw - paid) : 0;
+
+    const btn = document.getElementById('payBtn');
+    btn.disabled = true;
+    btn.textContent = 'Sending...';
+
+    try {
+      const res = await fetch(BACKEND + '/book', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          client_name:  name,
+          client_email: email,
+          client_phone: phone,
+          service:      booking.serviceName,
+          format:       booking.formatName,
+          specialty:    booking.specialtyName,
+          date:         booking.date,
+          date_key:     booking.dateKey,
+          time:         booking.time,
+          amount:       booking.priceRaw,
+          deposit:      booking.deposit === 'half',
+          remaining:    remaining,
+          pay_method:   payMethod,
+          instapay_ref: ipaRef,
+          notes:        notes,
+          emergency:    emergency
+        })
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        // Slot was taken by someone else
+        showNotification(data.detail || 'This slot was just taken. Please choose another time.', 'error');
+        btn.disabled = false;
+        btn.textContent = '🔒 Complete Booking';
+        // Reload slots to show updated availability
+        if (booking.dateKey) renderRealTimeSlots(booking.dateKey);
+        return;
+      }
+
+      // Success!
+      if (!bookedSlots[booking.dateKey]) bookedSlots[booking.dateKey] = [];
+      bookedSlots[booking.dateKey].push(booking.time);
+
+      document.getElementById('successName').textContent = name;
+      document.getElementById('successEmail').textContent = email;
+      document.getElementById('suc-service').textContent = booking.serviceName;
+      document.getElementById('suc-format').textContent = booking.formatName;
+      document.getElementById('suc-specialty').textContent = booking.specialtyName;
+      document.getElementById('suc-datetime').textContent = booking.date + ' at ' + booking.time;
+      document.getElementById('suc-amount').textContent = 'EGP ' + paid.toLocaleString() + (booking.deposit === 'half' ? ' (50% Deposit)' : ' (Full)');
+
+      showNotification('Booking submitted! Coach Hala has been notified. 🎉');
+      showPage('success');
+
+    } catch(e) {
+      showNotification('Connection error. Please try again.', 'error');
+      btn.disabled = false;
+      btn.textContent = '🔒 Complete Booking';
+    }
+  }
+
+  // Load real-time slots from backend
+  async function renderRealTimeSlots(dateKey) {
+    const grid = document.getElementById('slotsGrid');
+    grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--mid);font-size:.85rem;padding:.5rem">Loading available times...</div>';
+    try {
+      const res  = await fetch(BACKEND + '/slots/' + dateKey);
+      const data = await res.json();
+      grid.innerHTML = '';
+      const allTimes = ["9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM"];
+      allTimes.forEach(t => {
+        const el = document.createElement('div');
+        el.textContent = t;
+        if (data.taken.includes(t)) {
+          el.className = 'slot taken';
+        } else {
+          el.className = 'slot available';
+          el.onclick = () => selectTime(t, el);
+        }
+        grid.appendChild(el);
+      });
+    } catch(e) {
+      // Fallback to local slots if backend unreachable
+      renderTimeSlots();
+    }
+  }
+
+  async function sendContactForm() {
+    const name    = document.getElementById('contactName').value.trim();
+    const email   = document.getElementById('contactEmail').value.trim();
+    const subject = document.getElementById('contactSubject').value.trim();
+    const message = document.getElementById('contactMessage').value.trim();
+    if (!name || !email || !message) { showNotification('Please fill in all required fields.', 'error'); return; }
+
+    const btn = document.querySelector('#page-contact .pay-btn');
+    btn.disabled = true; btn.textContent = 'Sending...';
+
+    try {
+      const res = await fetch('https://formspree.io/f/' + FORMSPREE_CONTACT_ID, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify({
+          _subject:  '✉️ Website Message: ' + (subject || 'No subject'),
+          name, email, subject: subject || 'No subject', message,
+          _replyto:  email
+        })
+      });
+      if (res.ok || FORMSPREE_CONTACT_ID === 'YOUR_CONTACT_FORM_ID') {
+        showNotification('Message sent! Coach Hala will reply within 24 hours. 🎉');
+        document.getElementById('contactName').value = '';
+        document.getElementById('contactEmail').value = '';
+        document.getElementById('contactSubject').value = '';
+        document.getElementById('contactMessage').value = '';
+      } else {
+        throw new Error('Send failed');
+      }
+    } catch(e) {
+      showNotification('Could not send. Please email shahdaboelfotouh7@gmail.com directly.', 'error');
+    }
+    btn.disabled = false; btn.textContent = 'Send Message →';
+  }
+
+  function selectPayMethod(method) {
+    document.getElementById('pm-card').classList.toggle('selected', method === 'card');
+    document.getElementById('pm-instapay').classList.toggle('selected', method === 'instapay');
+    document.getElementById('card-fields').style.display = method === 'card' ? 'block' : 'none';
+    document.getElementById('instapay-fields').style.display = method === 'instapay' ? 'block' : 'none';
+  }
+
+  function selectServiceAndBook(service) {
+    showPage('booking');
+    setTimeout(() => {
+      const btns = document.querySelectorAll('#page-booking .option-btn');
+      btns.forEach(btn => {
+        if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'" + service + "'")) btn.click();
+      });
+    }, 120);
+  }
+
+  // ── CALENDAR ──
+  function dayKey(d) {
+    return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
+  }
+
+  function renderCalendar() {
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    document.getElementById('calMonth').textContent = months[calMonth] + ' ' + calYear;
+    const grid = document.getElementById('calGrid');
+    grid.innerHTML = '';
+    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
+      const el = document.createElement('div');
+      el.className = 'cal-day-label'; el.textContent = d; grid.appendChild(el);
+    });
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const dim = new Date(calYear, calMonth+1, 0).getDate();
+    const todayKey = dayKey(today);
+    for (let i = 0; i < firstDay; i++) {
+      const el = document.createElement('div'); el.className = 'cal-day empty'; grid.appendChild(el);
+    }
+    for (let d = 1; d <= dim; d++) {
+      const el = document.createElement('div');
+      const date = new Date(calYear, calMonth, d);
+      const key = dayKey(date);
+      const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const isWeekend = date.getDay() === 5 || date.getDay() === 6;
+      const isToday = key === todayKey;
+      el.textContent = d;
+      if (isPast || isWeekend) {
+        el.className = 'cal-day past';
+      } else {
+        el.className = 'cal-day available' + (isToday ? ' today' : '');
+        el.onclick = () => selectDate(date, el);
+      }
+      grid.appendChild(el);
+    }
+  }
+
+  function selectDate(date, el) {
+    document.querySelectorAll('.cal-day').forEach(d => d.classList.remove('selected'));
+    el.classList.add('selected');
+    const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const da = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    booking.date = da[date.getDay()] + ', ' + mo[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
+    booking.dateKey = dayKey(date);
+    booking.time = null;
+    document.getElementById('selectedDateLabel').textContent = booking.date;
+    document.getElementById('sum-datetime').textContent = booking.date;
+    document.getElementById('timeSlotSection').style.display = 'block';
+    renderRealTimeSlots(booking.dateKey);
+    checkProceed();
+  }
+
+  function renderTimeSlots() {
+    const grid = document.getElementById('slotsGrid');
+    grid.innerHTML = '';
+    const taken = bookedSlots[booking.dateKey] || [];
+    allTimes.forEach(t => {
+      const el = document.createElement('div');
+      el.textContent = t;
+      if (taken.includes(t)) {
+        el.className = 'slot taken';
+      } else {
+        el.className = 'slot available';
+        el.onclick = () => selectTime(t, el);
+      }
+      grid.appendChild(el);
+    });
+  }
+
+  function selectTime(time, el) {
+    document.querySelectorAll('.slot').forEach(s => s.classList.remove('selected'));
+    el.classList.add('selected');
+    booking.time = time;
+    document.getElementById('sum-datetime').textContent = booking.date + ' at ' + time;
+    checkProceed();
+  }
+
+  function changeMonth(dir) {
+    calMonth += dir;
+    if (calMonth > 11) { calMonth = 0; calYear++; }
+    if (calMonth < 0) { calMonth = 11; calYear--; }
+    renderCalendar();
+  }
+
+  // ── FORM HELPERS ──
+  function formatCard(el) {
+    let v = el.value.replace(/\D/g,'').substring(0,16);
+    el.value = v.replace(/(.{4})/g,'$1 ').trim();
+  }
+  function formatExpiry(el) {
+    let v = el.value.replace(/\D/g,'').substring(0,4);
+    if (v.length >= 2) v = v.substring(0,2) + ' / ' + v.substring(2);
+    el.value = v;
+  }
+
+
+
+  // ── NOTIFICATIONS ──
+  function showNotification(msg, type) {
+    const el = document.getElementById('notification');
+    el.className = 'notification' + (type === 'error' ? ' error' : '');
+    document.getElementById('notifIcon').textContent = type === 'error' ? '✕' : '✓';
+    document.getElementById('notifMsg').textContent = msg;
+    el.classList.add('show');
+    setTimeout(() => el.classList.remove('show'), 4500);
+  }
+
+  // ── INIT ──
+  renderCalendar();
+</script>
+</body>
+</html>
