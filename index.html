@@ -1539,6 +1539,24 @@
   // ── REAL BACKEND URL ──
   const BACKEND = 'https://web-production-43aee.up.railway.app';
 
+  async function apiCall(path, options = {}) {
+    // Try direct first, fall back to CORS proxy
+    try {
+      const res = await fetch(BACKEND + path, {
+        ...options,
+        headers: { 'Content-Type': 'application/json', ...(options.headers || {}) }
+      });
+      return res;
+    } catch(e) {
+      // Fallback: use corsproxy.io
+      const res = await fetch('https://corsproxy.io/?' + encodeURIComponent(BACKEND + path), {
+        ...options,
+        headers: { 'Content-Type': 'application/json', ...(options.headers || {}) }
+      });
+      return res;
+    }
+  }
+
   async function completePayment() {
     const name     = document.getElementById('clientName').value.trim();
     const email    = document.getElementById('clientEmail').value.trim();
@@ -1559,9 +1577,8 @@
     btn.textContent = 'Sending...';
 
     try {
-      const res = await fetch(BACKEND + '/book', {
+      const res = await apiCall('/book', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           client_name:  name,
           client_email: email,
@@ -1621,7 +1638,7 @@
     const grid = document.getElementById('slotsGrid');
     grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;color:var(--mid);font-size:.85rem;padding:.5rem">Loading available times...</div>';
     try {
-      const res  = await fetch(BACKEND + '/slots/' + dateKey);
+      const res  = await apiCall('/slots/' + dateKey);
       const data = await res.json();
       grid.innerHTML = '';
       const allTimes = ["9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM"];
