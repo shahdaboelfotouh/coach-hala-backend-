@@ -129,7 +129,7 @@ def create_booking(b: BookingRequest):
         "booking_id": booking_id
     }).execute()
 
-    # Send email to coach
+ # Send email to coach
     _send_coach_notification(b, booking_id)
 
     # Send "pending" email to client
