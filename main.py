@@ -34,7 +34,7 @@ supabase: Client = create_client(
 resend.api_key = os.environ["RESEND_API_KEY"]
 
 # ── Config ──
-COACH_EMAIL = "shahdaboelfotouh7@gmail.com"
+COACH_EMAIL = "halalife81@gmail.com"
 FROM_EMAIL  = "onboarding@resend.dev"  # Free Resend test address — works without domain
 SITE_URL    = os.environ.get("SITE_URL", "https://halaelshahawy.vercel.app")
 BACKEND_URL = os.environ.get("BACKEND_URL", "https://web-production-43aee.up.railway.app")
@@ -242,7 +242,7 @@ def _send_client_pending(b: BookingRequest):
             <p style="background:#FFF3CD;padding:12px;border-radius:8px;border-left:4px solid #F5C842">
               ⚠️ <b>Your session is not confirmed yet.</b> You will receive another email once Coach Hala confirms.
             </p>
-            <p>Questions? WhatsApp: <b>01013996744</b></p>
+            <p>Questions? WhatsApp: <b>01004295182</b></p>
             <p>Warm regards,<br><b>Coach Hala El Shahawy</b></p>
           </div>
         </div>"""
@@ -266,7 +266,7 @@ def _send_client_confirmation(b: dict, zoom_link: Optional[str]):
             <p><b>Service:</b> {b['service']}</p>
             <p><b>Date & Time:</b> {b['date_display']} at {b['time']}</p>
             {format_detail}
-            <p>Questions? WhatsApp: <b>01013996744</b></p>
+            <p>Questions? WhatsApp: <b>01004295182</b></p>
             <p>See you soon!<br><b>Coach Hala El Shahawy</b></p>
           </div>
         </div>"""
