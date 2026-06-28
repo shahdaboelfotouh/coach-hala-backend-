@@ -1921,18 +1921,124 @@
   let currentRegion = REGIONS.EG; // default Egypt
 
   async function detectRegion() {
-    try {
-      const res = await fetch('https://ipapi.co/json/');
-      const data = await res.json();
-      const code = data.country_code;
-      currentRegion = REGIONS[code] || REGIONS.DEFAULT;
-    } catch(e) {
-      currentRegion = REGIONS.EG; // fallback Egypt
+    // Try multiple IP detection services
+    const services = [
+      () => fetch('https://ipapi.co/json/').then(r => r.json()).then(d => d.country_code),
+      () => fetch('https://api.country.is/').then(r => r.json()).then(d => d.country),
+      () => fetch('https://ipinfo.io/json').then(r => r.json()).then(d => d.country),
+    ];
+
+    let code = null;
+    for (const service of services) {
+      try {
+        code = await Promise.race([service(), new Promise((_, rej) => setTimeout(() => rej('timeout'), 3000))]);
+        if (code) break;
+      } catch(e) { continue; }
     }
+
+    currentRegion = REGIONS[code] || REGIONS.EG;
     applyRegionPricing();
     updatePaymentMethods();
+    updatePricingCards();
+
     const badge = document.getElementById('regionBadge');
     if (badge) badge.textContent = currentRegion.flag + ' ' + currentRegion.name;
+
+    // Show region selector
+    renderRegionSelector();
+  }
+
+  function renderRegionSelector() {
+    const existing = document.getElementById('regionSelector');
+    if (existing) return;
+    const sel = document.createElement('div');
+    sel.id = 'regionSelector';
+    sel.style.cssText = 'position:fixed;bottom:80px;right:20px;z-index:998;background:white;border:1.5px solid #EDD8CC;border-radius:12px;padding:.75rem 1rem;box-shadow:0 4px 20px rgba(0,0,0,.12);font-size:.8rem;cursor:pointer';
+    sel.innerHTML = `
+      <div style="font-weight:700;color:#2C2424;margin-bottom:.4rem">🌍 Your Region: ${currentRegion.flag} ${currentRegion.name}</div>
+      <select onchange="changeRegion(this.value)" style="width:100%;padding:.4rem;border:1px solid #EDD8CC;border-radius:6px;font-family:inherit;font-size:.78rem;cursor:pointer">
+        <option value="">Change region...</option>
+        <option value="EG">🇪🇬 Egypt (EGP 700/hr)</option>
+        <option value="AE">🇦🇪 UAE (AED 250/hr)</option>
+        <option value="SA">🇸🇦 Saudi Arabia (SAR 250/hr)</option>
+        <option value="KW">🇰🇼 Kuwait (KWD 250/hr)</option>
+        <option value="QA">🇶🇦 Qatar (QAR 250/hr)</option>
+        <option value="BH">🇧🇭 Bahrain (BHD 250/hr)</option>
+        <option value="OM">🇴🇲 Oman (OMR 250/hr)</option>
+        <option value="DEFAULT">🌍 International (USD $70/hr)</option>
+      </select>
+    `;
+    document.body.appendChild(sel);
+  }
+
+  function changeRegion(code) {
+    if (!code) return;
+    currentRegion = REGIONS[code] || REGIONS.DEFAULT;
+    applyRegionPricing();
+    updatePaymentMethods();
+    updatePricingCards();
+    const badge = document.getElementById('regionBadge');
+    if (badge) badge.textContent = currentRegion.flag + ' ' + currentRegion.name;
+    // Update selector label
+    const sel = document.getElementById('regionSelector');
+    if (sel) sel.querySelector('div').textContent = '🌍 Your Region: ' + currentRegion.flag + ' ' + currentRegion.name;
+  }
+
+  function updatePricingCards() {
+    // Update all price amounts shown on the page
+    const serviceMap = {
+      'session-1hr':   1,
+      'session-1.5hr': 1.5,
+      'session-2hr':   2,
+      'session-2.5hr': 2.5,
+      'starter':       3 * 0.95,
+      'momentum':      6 * 0.905,
+      'transformation':10 * 0.96,
+      'deepdive':      6 * 0.96,
+      'intensive':     8 * 0.975,
+      'annual':        24 * 0.952,
+    };
+
+    // Update price amounts in DOM
+    document.querySelectorAll('.price-amount').forEach((el, i) => {
+      const keys = Object.keys(serviceMap);
+      if (keys[i]) {
+        const price = Math.round(currentRegion.rate * serviceMap[keys[i]]);
+        el.textContent = price.toLocaleString();
+      }
+    });
+
+    // Update currency symbols
+    document.querySelectorAll('.price-period').forEach(el => {
+      el.textContent = el.textContent.replace(/^[A-Z]{2,3}|\$|£|€/, currentRegion.symbol);
+    });
+
+    // Update booking option buttons
+    const priceUpdates = {
+      'session-1hr':    Math.round(currentRegion.rate * 1),
+      'session-1.5hr':  Math.round(currentRegion.rate * 1.5),
+      'session-2hr':    Math.round(currentRegion.rate * 2),
+      'session-2.5hr':  Math.round(currentRegion.rate * 2.5),
+      'starter':        Math.round(currentRegion.rate * 3 * 0.95),
+      'momentum':       Math.round(currentRegion.rate * 6 * 0.905),
+      'transformation': Math.round(currentRegion.rate * 10 * 0.96),
+      'deepdive':       Math.round(currentRegion.rate * 6 * 0.96),
+      'intensive':      Math.round(currentRegion.rate * 8 * 0.975),
+      'annual':         Math.round(currentRegion.rate * 24 * 0.952),
+    };
+
+    document.querySelectorAll('.option-btn .opt-sub').forEach(el => {
+      for (const [key, price] of Object.entries(priceUpdates)) {
+        if (el.textContent.includes('EGP') || el.textContent.includes('AED') || 
+            el.textContent.includes('SAR') || el.textContent.includes('$')) {
+          // Update if it contains a price
+          const match = el.textContent.match(/([A-Z]{2,3}|\$)\s*([\d,]+)/);
+          if (match) {
+            el.textContent = el.textContent.replace(match[0], currentRegion.symbol + ' ' + price.toLocaleString());
+          }
+        }
+      }
+    });
   }
 
   function getPrice(serviceKey) {
