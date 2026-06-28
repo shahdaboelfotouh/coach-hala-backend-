@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coach Hala El Shahawy — Life Coaching</title>
 <meta name="description" content="Certified ICF Life Coach in Cairo, Egypt. Book personal coaching sessions for career, mindset, relationships, and well-being. In-Person & Zoom available.">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
     /* Cheerful, warm, vibrant — coral + violet + sunny yellow on soft white */
@@ -45,6 +45,48 @@
 
   .page { display: none; min-height: 100vh; }
   .page.active { display: block; }
+
+
+  /* ── RTL / ARABIC ── */
+  body.rtl { direction: rtl; font-family: 'Cairo', sans-serif; }
+  body.rtl h1, body.rtl h2, body.rtl h3, body.rtl h4 { font-family: 'Cairo', sans-serif; }
+  body.rtl .nav-links { flex-direction: row-reverse; }
+  body.rtl .hero-content { text-align: right; }
+  body.rtl .hero-actions { flex-direction: row-reverse; }
+  body.rtl .section-eyebrow, body.rtl .center { text-align: center; }
+  body.rtl .about-layout { direction: rtl; }
+  body.rtl .contact-layout { direction: rtl; }
+  body.rtl .summary-row { flex-direction: row-reverse; }
+  body.rtl .step-header { flex-direction: row-reverse; }
+  body.rtl .footer-grid { direction: rtl; }
+
+  /* ── LANG TOGGLE ── */
+  .lang-toggle {
+    display: flex; align-items: center; gap: .4rem;
+    background: var(--sand); border: 1.5px solid var(--border);
+    border-radius: 100px; padding: .25rem .5rem;
+    cursor: pointer; font-size: .78rem; font-weight: 700;
+    color: var(--charcoal); transition: all var(--transition);
+    margin-right: .5rem;
+  }
+  .lang-toggle:hover { border-color: var(--coral); }
+
+  /* ── REGION BADGE ── */
+  .region-badge {
+    display: inline-flex; align-items: center; gap: .35rem;
+    background: rgba(255,255,255,.15); border: 1px solid rgba(255,255,255,.3);
+    color: rgba(255,255,255,.9); padding: .25rem .75rem; border-radius: 100px;
+    font-size: .72rem; font-weight: 600; margin-left: .75rem;
+  }
+
+  /* ── BANK TRANSFER BOX ── */
+  .bank-box {
+    background: linear-gradient(135deg, #2C5F8A 0%, #1a4a6e 100%);
+    border-radius: var(--radius); padding: 1.5rem; color: var(--white);
+  }
+  .bank-box h4 { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; color: var(--sunny-lt); margin-bottom: .5rem; }
+  .bank-box p { font-size: .83rem; opacity: .85; line-height: 1.6; margin-bottom: .5rem; }
+  .bank-detail { background: rgba(255,255,255,.15); border-radius: 8px; padding: .65rem 1rem; margin: .35rem 0; font-size: .88rem; font-weight: 600; }
 
   /* ── NAV ── */
   nav {
@@ -534,8 +576,11 @@
     <a onclick="showPage('terms')" data-page="terms">Policies</a>
     <a onclick="showPage('booking')" class="nav-cta" data-page="booking">✦ Book a Session</a>
   </div>
-  <div class="hamburger" id="hamburger" onclick="toggleMenu()">
-    <span></span><span></span><span></span>
+  <div style="display:flex;align-items:center">
+    <button class="lang-toggle" onclick="toggleLang()" id="langBtn">🌐 العربية</button>
+    <div class="hamburger" id="hamburger" onclick="toggleMenu()">
+      <span></span><span></span><span></span>
+    </div>
   </div>
 </nav>
 
@@ -547,7 +592,7 @@
     <div class="hero-blob2"></div>
     <div class="hero-blob3"></div>
     <div class="hero-content">
-      <div class="hero-badge">✦ ICF Accredited Certified Life Coach</div>
+      <div class="hero-badge">✦ ICF Accredited Certified Life Coach<span class="region-badge" id="regionBadge"></span></div>
       <h1>
         <em>Empowering</em> Your Journey<br>
         <strong>to Clarity, Purpose &amp; Growth</strong>
@@ -1095,7 +1140,7 @@
             </div>
             <div class="form-group">
               <label>Phone / WhatsApp *</label>
-              <input type="tel" id="clientPhone" placeholder="+20 1XX XXX XXXX">
+              <input type="tel" id="clientPhone" placeholder="+20 1004295182">
             </div>
             <div class="form-group">
               <label>Emergency Contact (Optional)</label>
@@ -1111,17 +1156,8 @@
         <!-- Payment Method -->
         <div class="form-section">
           <div class="form-section-title">Payment Method</div>
-          <div class="payment-methods">
-            <div class="pay-method selected" id="pm-card" onclick="selectPayMethod('card')">
-              <div class="pay-method-icon">💳</div>
-              <div class="pay-method-label">Credit / Debit Card</div>
-              <div class="pay-method-sub">Visa · Mastercard</div>
-            </div>
-            <div class="pay-method" id="pm-instapay" onclick="selectPayMethod('instapay')">
-              <div class="pay-method-icon">📱</div>
-              <div class="pay-method-label">InstaPay</div>
-              <div class="pay-method-sub">Instant transfer · EGP only</div>
-            </div>
+          <div id="payMethodsContainer">
+            <!-- Populated dynamically based on region -->
           </div>
 
           <div id="card-fields">
@@ -1148,10 +1184,26 @@
               <div class="ipa-address" id="ipaAddress">01013996744</div>
               <p style="margin-top:.5rem;font-size:.78rem">⚠ Enter your own InstaPay phone number below so Hala can match your payment.</p>
               <div class="form-group" style="margin-top:.75rem">
-                <label style="color:rgba(255,255,255,.8)">Your InstaPay IPA / Phone Number *</label>
+                <label style="color:rgba(255,255,255,.8)">Your InstaPay Phone Number *</label>
                 <input type="text" id="instapayRef" placeholder="e.g. 010XXXXXXXX" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:white">
               </div>
               <p style="margin-top:.6rem;font-size:.76rem;opacity:.75">After sending, click "Complete Booking" — your slot will be held for 2 hours while payment is manually verified.</p>
+            </div>
+          </div>
+
+          <div id="bank-fields" style="display:none">
+            <div class="bank-box">
+              <h4>🏦 International Bank Transfer</h4>
+              <p>Please transfer the session amount to the following account and include your name as reference:</p>
+              <div class="bank-detail">Bank: <strong>CIB Egypt (Commercial International Bank)</strong></div>
+              <div class="bank-detail">Account Name: <strong>Hala El Shahawy</strong></div>
+              <div class="bank-detail">IBAN: <strong>EG00 0000 0000 0000 0000 0000 0000</strong></div>
+              <div class="bank-detail">SWIFT/BIC: <strong>CIBEEGCX</strong></div>
+              <p style="margin-top:.75rem;font-size:.78rem;opacity:.85">⚠ Please WhatsApp +20 1004295182 with your transfer receipt after sending. Your slot will be confirmed once payment is verified.</p>
+              <div class="form-group" style="margin-top:.75rem">
+                <label style="color:rgba(255,255,255,.8)">Your Transfer Reference / Receipt Number *</label>
+                <input type="text" id="bankRef" placeholder="e.g. TXN123456789" style="background:rgba(255,255,255,.15);border-color:rgba(255,255,255,.3);color:white">
+              </div>
             </div>
           </div>
         </div>
@@ -1267,13 +1319,13 @@
         <div class="contact-detail">
           <div class="contact-icon">📧</div>
           <div class="contact-detail-text">
-            <strong>Email</strong><span>shahdaboelfotouh7@gmail.com</span>
+            <strong>Email</strong><span>halalife81@gmail.com</span>
           </div>
         </div>
         <div class="contact-detail">
           <div class="contact-icon">📱</div>
           <div class="contact-detail-text">
-            <strong>Phone / WhatsApp</strong><span>+20 1XX XXX XXXX</span>
+            <strong>Phone / WhatsApp</strong><span>+20 1004295182</span>
           </div>
         </div>
         <div class="contact-detail">
@@ -1370,7 +1422,7 @@
       </div>
       <div class="terms-section">
         <h3>7. Privacy &amp; Data</h3>
-        <p>Personal data is collected solely for managing bookings and communications, stored securely, and never sold. Request deletion at any time: shahdaboelfotouh7@gmail.com</p>
+        <p>Personal data is collected solely for managing bookings and communications, stored securely, and never sold. Request deletion at any time: halalife81@gmail.com</p>
       </div>
       <div style="margin-top:2rem;padding:1.35rem;background:var(--sand);border-radius:var(--radius);text-align:center">
         <p style="font-size:.88rem;color:var(--mid);margin-bottom:.85rem">Questions about these policies? Don't hesitate to reach out.</p>
@@ -1563,8 +1615,15 @@
     const phone    = document.getElementById('clientPhone').value.trim();
     const notes    = document.getElementById('clientNotes').value.trim();
     const emergency= document.getElementById('clientEmergency').value.trim();
-    const payMethod= document.getElementById('pm-instapay').classList.contains('selected') ? 'InstaPay' : 'Card';
-    const ipaRef   = payMethod === 'InstaPay' ? (document.getElementById('instapayRef').value.trim()) : '';
+    const pmCard = document.getElementById('pm-card');
+    const pmIP   = document.getElementById('pm-instapay');
+    const pmBank = document.getElementById('pm-bank');
+    const payMethod = pmIP && pmIP.classList.contains('selected') ? 'InstaPay'
+                    : pmBank && pmBank.classList.contains('selected') ? 'Bank Transfer'
+                    : 'Card';
+    const ipaRef = payMethod === 'InstaPay'      ? ((document.getElementById('instapayRef') ? document.getElementById('instapayRef').value.trim() : '') || '')
+                 : payMethod === 'Bank Transfer'  ? ((document.getElementById('bankRef') ? document.getElementById('bankRef').value.trim() : '') || '')
+                 : '';
 
     if (!name || !email) { showNotification('Please fill in your name and email.', 'error'); return; }
     if (!phone)          { showNotification('Please add your phone number.', 'error'); return; }
@@ -1689,16 +1748,21 @@
         throw new Error('Send failed');
       }
     } catch(e) {
-      showNotification('Could not send. Please email shahdaboelfotouh7@gmail.com directly.', 'error');
+      showNotification('Could not send. Please email halalife81@gmail.com directly.', 'error');
     }
     btn.disabled = false; btn.textContent = 'Send Message →';
   }
 
   function selectPayMethod(method) {
-    document.getElementById('pm-card').classList.toggle('selected', method === 'card');
-    document.getElementById('pm-instapay').classList.toggle('selected', method === 'instapay');
-    document.getElementById('card-fields').style.display = method === 'card' ? 'block' : 'none';
-    document.getElementById('instapay-fields').style.display = method === 'instapay' ? 'block' : 'none';
+    ['pm-card','pm-instapay','pm-bank'].forEach(id => {
+      const el = document.getElementById(id);
+      if (el) el.classList.remove('selected');
+    });
+    const active = document.getElementById('pm-' + method);
+    if (active) active.classList.add('selected');
+    document.getElementById('card-fields').style.display      = method === 'card'     ? 'block' : 'none';
+    document.getElementById('instapay-fields').style.display  = method === 'instapay' ? 'block' : 'none';
+    document.getElementById('bank-fields').style.display      = method === 'bank'     ? 'block' : 'none';
   }
 
   function selectServiceAndBook(service) {
@@ -1821,6 +1885,259 @@
 
   // ── INIT ──
   renderCalendar();
+  detectRegion();
+
+  // ══════════════════════════════════════════
+  //  REGION DETECTION & PRICING
+  // ══════════════════════════════════════════
+
+  const REGIONS = {
+    EG: { name: 'Egypt',        currency: 'EGP', symbol: 'EGP', rate: 700,  flag: '🇪🇬', payment: ['instapay'] },
+    AE: { name: 'UAE',          currency: 'AED', symbol: 'AED', rate: 250,  flag: '🇦🇪', payment: ['card','bank'] },
+    SA: { name: 'Saudi Arabia', currency: 'SAR', symbol: 'SAR', rate: 250,  flag: '🇸🇦', payment: ['card','bank'] },
+    KW: { name: 'Kuwait',       currency: 'KWD', symbol: 'KWD', rate: 250,  flag: '🇰🇼', payment: ['card','bank'] },
+    QA: { name: 'Qatar',        currency: 'QAR', symbol: 'QAR', rate: 250,  flag: '🇶🇦', payment: ['card','bank'] },
+    BH: { name: 'Bahrain',      currency: 'BHD', symbol: 'BHD', rate: 250,  flag: '🇧🇭', payment: ['card','bank'] },
+    OM: { name: 'Oman',         currency: 'OMR', symbol: 'OMR', rate: 250,  flag: '🇴🇲', payment: ['card','bank'] },
+    JO: { name: 'Jordan',       currency: 'USD', symbol: '$',   rate: 70,   flag: '🇯🇴', payment: ['card','bank'] },
+    LB: { name: 'Lebanon',      currency: 'USD', symbol: '$',   rate: 70,   flag: '🇱🇧', payment: ['card','bank'] },
+    DEFAULT: { name: 'International', currency: 'USD', symbol: '$', rate: 70, flag: '🌍', payment: ['card','bank'] }
+  };
+
+  // Pricing per service per region (hourly rate multiplier)
+  const SERVICE_PRICES = {
+    'session-1hr':    { hours: 1 },
+    'session-1.5hr':  { hours: 1.5 },
+    'session-2hr':    { hours: 2 },
+    'session-2.5hr':  { hours: 2.5 },
+    'starter':        { hours: 3,  discount: 0.95 },
+    'momentum':       { hours: 6,  discount: 0.905 },
+    'transformation': { hours: 10, discount: 0.96 },
+    'deepdive':       { hours: 6,  discount: 0.96 },
+    'intensive':      { hours: 8,  discount: 0.975 },
+    'annual':         { hours: 24, discount: 0.952 }
+  };
+
+  let currentRegion = REGIONS.EG; // default Egypt
+
+  async function detectRegion() {
+    try {
+      const res = await fetch('https://ipapi.co/json/');
+      const data = await res.json();
+      const code = data.country_code;
+      currentRegion = REGIONS[code] || REGIONS.DEFAULT;
+    } catch(e) {
+      currentRegion = REGIONS.EG; // fallback Egypt
+    }
+    applyRegionPricing();
+    updatePaymentMethods();
+    const badge = document.getElementById('regionBadge');
+    if (badge) badge.textContent = currentRegion.flag + ' ' + currentRegion.name;
+  }
+
+  function getPrice(serviceKey) {
+    const sp = SERVICE_PRICES[serviceKey];
+    if (!sp) return 0;
+    const base = currentRegion.rate * sp.hours * (sp.discount || 1);
+    return Math.round(base);
+  }
+
+  function fmtPrice(amount) {
+    return currentRegion.symbol + ' ' + amount.toLocaleString();
+  }
+
+  function applyRegionPricing() {
+    // Update all price displays on the page
+    document.querySelectorAll('[data-service-key]').forEach(el => {
+      const key = el.dataset.serviceKey;
+      const type = el.dataset.priceType;
+      const price = getPrice(key);
+      if (type === 'amount') el.textContent = price.toLocaleString();
+      if (type === 'symbol') el.textContent = currentRegion.symbol;
+      if (type === 'full')   el.textContent = fmtPrice(price);
+    });
+  }
+
+  function updatePaymentMethods() {
+    const container = document.getElementById('payMethodsContainer');
+    if (!container) return;
+    const methods = currentRegion.payment;
+    let html = '<div class="payment-methods" style="grid-template-columns:' + (methods.length === 1 ? '1fr' : '1fr 1fr') + '">';
+    if (methods.includes('card')) {
+      html += `<div class="pay-method" id="pm-card" onclick="selectPayMethod('card')">
+        <div class="pay-method-icon">💳</div>
+        <div class="pay-method-label">Credit / Debit Card</div>
+        <div class="pay-method-sub">Visa · Mastercard</div>
+      </div>`;
+    }
+    if (methods.includes('instapay')) {
+      html += `<div class="pay-method selected" id="pm-instapay" onclick="selectPayMethod('instapay')">
+        <div class="pay-method-icon">📱</div>
+        <div class="pay-method-label">InstaPay</div>
+        <div class="pay-method-sub">Instant transfer · EGP only</div>
+      </div>`;
+    }
+    if (methods.includes('bank')) {
+      html += `<div class="pay-method" id="pm-bank" onclick="selectPayMethod('bank')">
+        <div class="pay-method-icon">🏦</div>
+        <div class="pay-method-label">Bank Transfer</div>
+        <div class="pay-method-sub">International wire transfer</div>
+      </div>`;
+    }
+    html += '</div>';
+    container.innerHTML = html;
+
+    // Auto-select first method
+    if (methods.includes('instapay')) selectPayMethod('instapay');
+    else if (methods.includes('card')) selectPayMethod('card');
+    else selectPayMethod('bank');
+  }
+
+  // ══════════════════════════════════════════
+  //  ARABIC / ENGLISH TOGGLE
+  // ══════════════════════════════════════════
+
+  const TRANSLATIONS = {
+    ar: {
+      // Nav
+      'Home': 'الرئيسية',
+      'About': 'عني',
+      'Services': 'الخدمات',
+      'Contact': 'تواصل معي',
+      'Policies': 'السياسات',
+      '✦ Book a Session': '✦ احجز جلسة',
+      // Hero
+      'ICF Accredited Certified Life Coach': 'مدربة حياة معتمدة من الاتحاد الدولي للتدريب',
+      'to Clarity, Purpose & Growth': 'نحو الوضوح والهدف والنمو',
+      'Personal coaching rooted in wisdom, presence, and lasting transformation.': 'تدريب شخصي متجذر في الحكمة والحضور والتحول الدائم.',
+      '✦ Book Your Session': '✦ احجز جلستك',
+      'Meet Coach Hala': 'تعرف على المدربة هالة',
+      'Clients Served': 'عميل تم خدمتهم',
+      'Accredited Provider': 'مزود معتمد',
+      // Sections
+      'What I Offer': 'ما أقدمه',
+      'Coaching Specialties': 'تخصصات التدريب',
+      "Tailored coaching journeys for every season of life — whether you're navigating a transition, seeking clarity, or ready to lead.": 'رحلات تدريبية مصممة لكل مرحلة من مراحل الحياة.',
+      'Transparent Pricing': 'أسعار شفافة',
+      'Sessions & Bundles': 'الجلسات والباقات',
+      'Client Stories': 'قصص العملاء',
+      'What People Are Saying': 'ماذا يقولون',
+      // Services
+      'Career & Leadership': 'المسار المهني والقيادة',
+      'Personal Growth & Mindset': 'النمو الشخصي وتطوير العقلية',
+      'Relationship & Communication': 'العلاقات والتواصل',
+      'Well-being & Work-Life Balance': 'الرفاهية والتوازن',
+      'Youth & Transition Coaching': 'تدريب الشباب والانتقال',
+      'Ready to begin?': 'هل أنت مستعد للبدء؟',
+      'Every transformation starts with a single conversation. Book your session today.': 'كل تحول يبدأ بمحادثة واحدة. احجز جلستك اليوم.',
+      'Book Now →': 'احجز الآن →',
+      // Booking
+      'Schedule Your Session': 'جدولة جلستك',
+      'Book a Session': 'احجز جلسة',
+      'All times shown in Cairo Local Time (EET/EEST). Unavailable slots are crossed out.': 'جميع الأوقات بتوقيت القاهرة المحلي. الفترات غير المتاحة مشطوبة.',
+      'Select Your Service': 'اختر خدمتك',
+      'Session Format': 'صيغة الجلسة',
+      'Coaching Specialty': 'تخصص التدريب',
+      'Pick a Date & Time': 'اختر تاريخاً ووقتاً',
+      'Session Summary': 'ملخص الجلسة',
+      'Service': 'الخدمة',
+      'Format': 'الصيغة',
+      'Specialty': 'التخصص',
+      'Date & Time': 'التاريخ والوقت',
+      'Timezone': 'المنطقة الزمنية',
+      'Total': 'المجموع',
+      'Pay in Full': 'دفع كامل',
+      '50% Deposit': 'دفعة 50%',
+      'Continue to Checkout →': 'متابعة الدفع →',
+      // Checkout
+      'Secure Checkout': 'دفع آمن',
+      'Complete Your Booking': 'أكمل حجزك',
+      'Your Details': 'بياناتك',
+      'Full Name *': 'الاسم الكامل *',
+      'Email Address *': 'البريد الإلكتروني *',
+      'Phone / WhatsApp *': 'الهاتف / واتساب *',
+      'Payment Method': 'طريقة الدفع',
+      'Complete Booking': 'إتمام الحجز',
+      // About
+      'My Story': 'قصتي',
+      'My Coaching Philosophy': 'فلسفتي في التدريب',
+      // Contact
+      'Get in Touch': 'تواصل معي',
+      "Let's Connect": 'لنتواصل',
+      'Send a Message': 'أرسل رسالة',
+      'Send Message →': 'إرسال الرسالة →',
+      // Footer
+      'Certified Life Coach · ICF-Accredited Provider': 'مدربة حياة معتمدة · مزود معتمد من الاتحاد الدولي',
+      'Cairo, Egypt': 'القاهرة، مصر',
+    }
+  };
+
+  let currentLang = 'en';
+
+  function toggleLang() {
+    currentLang = currentLang === 'en' ? 'ar' : 'en';
+    const btn = document.getElementById('langBtn');
+    if (currentLang === 'ar') {
+      document.body.classList.add('rtl');
+      document.documentElement.setAttribute('lang', 'ar');
+      btn.textContent = '🌐 English';
+      applyTranslations('ar');
+    } else {
+      document.body.classList.remove('rtl');
+      document.documentElement.setAttribute('lang', 'en');
+      btn.textContent = '🌐 العربية';
+      applyTranslations('en');
+    }
+  }
+
+  // Store original English content for toggle back
+  let englishContent = null;
+
+  function applyTranslations(lang) {
+    if (lang === 'en') {
+      if (englishContent) {
+        document.body.innerHTML = englishContent;
+        // Re-init everything
+        document.body.classList.remove('rtl');
+        document.documentElement.setAttribute('lang', 'en');
+        renderCalendar();
+        detectRegion();
+        document.getElementById('langBtn').textContent = '🌐 العربية';
+      } else {
+        location.reload();
+      }
+      return;
+    }
+
+    // Save English version
+    englishContent = document.body.innerHTML;
+
+    const t = TRANSLATIONS.ar;
+
+    // Walk all text nodes and replace
+    function walkAndTranslate(node) {
+      if (node.nodeType === 3) { // text node
+        const trimmed = node.textContent.trim();
+        if (trimmed && t[trimmed]) {
+          node.textContent = node.textContent.replace(trimmed, t[trimmed]);
+        }
+      } else if (node.nodeType === 1) {
+        // Translate placeholder
+        if (node.placeholder && t[node.placeholder]) {
+          node.placeholder = t[node.placeholder];
+        }
+        // Translate title/alt
+        if (node.title && t[node.title]) node.title = t[node.title];
+        node.childNodes.forEach(walkAndTranslate);
+      }
+    }
+    walkAndTranslate(document.body);
+
+    // Update lang button
+    const btn = document.getElementById('langBtn');
+    if (btn) btn.textContent = '🌐 English';
+  }
+
 </script>
 </body>
 </html>
