@@ -976,35 +976,35 @@
           </div>
           <div class="step-content">
             <div class="option-grid">
-              <button class="option-btn" onclick="selectOption('service','session-1hr',this,'Discovery Session (1hr)','EGP 700',700)">
-                <span class="opt-label">Discovery</span><span class="opt-sub">1 Hour · EGP 700</span>
+              <button class="option-btn" data-svc="session-1hr" onclick="selectServiceOption(this)">
+                <span class="opt-label">Discovery</span><span class="opt-sub svc-price" data-svc="session-1hr">1 Hour</span>
               </button>
-              <button class="option-btn" onclick="selectOption('service','session-1.5hr',this,'Extended Session (1.5hr)','EGP 1,050',1050)">
-                <span class="opt-label">Extended</span><span class="opt-sub">1.5 Hours · EGP 1,050</span>
+              <button class="option-btn" data-svc="session-1.5hr" onclick="selectServiceOption(this)">
+                <span class="opt-label">Extended</span><span class="opt-sub svc-price" data-svc="session-1.5hr">1.5 Hours</span>
               </button>
-              <button class="option-btn" onclick="selectOption('service','session-2hr',this,'Deep Dive (2hr)','EGP 1,400',1400)">
-                <span class="opt-label">Deep Dive</span><span class="opt-sub">2 Hours · EGP 1,400</span>
+              <button class="option-btn" data-svc="session-2hr" onclick="selectServiceOption(this)">
+                <span class="opt-label">Deep Dive</span><span class="opt-sub svc-price" data-svc="session-2hr">2 Hours</span>
               </button>
-              <button class="option-btn" onclick="selectOption('service','session-2.5hr',this,'Intensive (2.5hr)','EGP 1,750',1750)">
-                <span class="opt-label">Intensive</span><span class="opt-sub">2.5 Hours · EGP 1,750</span>
+              <button class="option-btn" data-svc="session-2.5hr" onclick="selectServiceOption(this)">
+                <span class="opt-label">Intensive</span><span class="opt-sub svc-price" data-svc="session-2.5hr">2.5 Hours</span>
               </button>
-              <button class="option-btn" onclick="selectOption('service','starter',this,'Starter Pack (3×1hr)','EGP 2,000',2000)">
-                <span class="opt-label">Starter Pack</span><span class="opt-sub">3×1hr · EGP 2,000</span>
+              <button class="option-btn" data-svc="starter" onclick="selectServiceOption(this)">
+                <span class="opt-label">Starter Pack</span><span class="opt-sub svc-price" data-svc="starter">3×1hr</span>
               </button>
-              <button class="option-btn" onclick="selectOption('service','momentum',this,'Momentum (6×1hr)','EGP 3,800',3800)">
-                <span class="opt-label">Momentum</span><span class="opt-sub">6×1hr · EGP 3,800</span>
+              <button class="option-btn" data-svc="momentum" onclick="selectServiceOption(this)">
+                <span class="opt-label">Momentum</span><span class="opt-sub svc-price" data-svc="momentum">6×1hr</span>
               </button>
-              <button class="option-btn" onclick="selectOption('service','transformation',this,'Transformation (10×1hr)','EGP 6,720',6720)">
-                <span class="opt-label">Transformation</span><span class="opt-sub">10×1hr · EGP 6,720</span>
+              <button class="option-btn" data-svc="transformation" onclick="selectServiceOption(this)">
+                <span class="opt-label">Transformation</span><span class="opt-sub svc-price" data-svc="transformation">10×1hr</span>
               </button>
-              <button class="option-btn" onclick="selectOption('service','deepdive',this,'Deep Dive Bundle (4×1.5hr)','EGP 5,040',5040)">
-                <span class="opt-label">Deep Bundle</span><span class="opt-sub">4×1.5hr · EGP 5,040</span>
+              <button class="option-btn" data-svc="deepdive" onclick="selectServiceOption(this)">
+                <span class="opt-label">Deep Bundle</span><span class="opt-sub svc-price" data-svc="deepdive">4×1.5hr</span>
               </button>
-              <button class="option-btn" onclick="selectOption('service','intensive',this,'Intensive Bundle (4×2hr)','EGP 5,460',5460)">
-                <span class="opt-label">Intensive Bundle</span><span class="opt-sub">4×2hr · EGP 5,460</span>
+              <button class="option-btn" data-svc="intensive" onclick="selectServiceOption(this)">
+                <span class="opt-label">Intensive Bundle</span><span class="opt-sub svc-price" data-svc="intensive">4×2hr</span>
               </button>
-              <button class="option-btn" onclick="selectOption('service','annual',this,'Annual Journey (24×1hr)','EGP 16,000',16000)">
-                <span class="opt-label">Annual Journey</span><span class="opt-sub">24×1hr · EGP 16,000</span>
+              <button class="option-btn" data-svc="annual" onclick="selectServiceOption(this)">
+                <span class="opt-label">Annual Journey</span><span class="opt-sub svc-price" data-svc="annual">24×1hr</span>
               </button>
             </div>
           </div>
@@ -1765,6 +1765,64 @@
     document.getElementById('bank-fields').style.display      = method === 'bank'     ? 'block' : 'none';
   }
 
+  // Service metadata
+  const SVC_META = {
+    'session-1hr':    {hours:1,    disc:1,     label:'Discovery',        sub:'1 Hour'},
+    'session-1.5hr':  {hours:1.5,  disc:1,     label:'Extended',         sub:'1.5 Hours'},
+    'session-2hr':    {hours:2,    disc:1,     label:'Deep Dive',        sub:'2 Hours'},
+    'session-2.5hr':  {hours:2.5,  disc:1,     label:'Intensive',        sub:'2.5 Hours'},
+    'starter':        {hours:3,    disc:0.95,  label:'Starter Pack',     sub:'3×1hr'},
+    'momentum':       {hours:6,    disc:0.905, label:'Momentum',         sub:'6×1hr'},
+    'transformation': {hours:10,   disc:0.96,  label:'Transformation',   sub:'10×1hr'},
+    'deepdive':       {hours:6,    disc:0.96,  label:'Deep Bundle',      sub:'4×1.5hr'},
+    'intensive':      {hours:8,    disc:0.975, label:'Intensive Bundle', sub:'4×2hr'},
+    'annual':         {hours:24,   disc:0.952, label:'Annual Journey',   sub:'24×1hr'},
+  };
+
+  function getSvcPrice(key) {
+    const m = SVC_META[key];
+    if (!m) return 0;
+    return Math.round(currentRegion.rate * m.hours * m.disc);
+  }
+
+  function selectServiceOption(btn) {
+    const key = btn.dataset.svc;
+    const meta = SVC_META[key];
+    if (!meta) return;
+    const price = getSvcPrice(key);
+    const priceStr = currentRegion.symbol + ' ' + price.toLocaleString();
+    const nameStr = meta.label + ' (' + meta.sub + ')';
+    btn.closest('.option-grid').querySelectorAll('.option-btn').forEach(b => b.classList.remove('selected'));
+    btn.classList.add('selected');
+    booking.service = key;
+    booking.serviceName = nameStr;
+    booking.servicePrice = priceStr;
+    booking.priceRaw = price;
+    document.getElementById('sum-service').textContent = nameStr;
+    document.getElementById('sum-price').textContent = priceStr;
+    updateDepositInfo();
+    checkProceed();
+  }
+
+  function refreshServiceButtonPrices() {
+    document.querySelectorAll('.svc-price[data-svc]').forEach(el => {
+      const key = el.dataset.svc;
+      const meta = SVC_META[key];
+      if (!meta) return;
+      const price = getSvcPrice(key);
+      el.textContent = meta.sub + ' · ' + currentRegion.symbol + ' ' + price.toLocaleString();
+    });
+    // If a service is already selected, update the summary price too
+    if (booking.service) {
+      const price = getSvcPrice(booking.service);
+      booking.priceRaw = price;
+      const priceStr = currentRegion.symbol + ' ' + price.toLocaleString();
+      booking.servicePrice = priceStr;
+      document.getElementById('sum-price').textContent = priceStr;
+      updateDepositInfo();
+    }
+  }
+
   function selectServiceAndBook(service) {
     showPage('booking');
     setTimeout(() => {
@@ -1940,6 +1998,7 @@
     applyRegionPricing();
     updatePaymentMethods();
     updatePricingCards();
+    refreshServiceButtonPrices();
 
     const badge = document.getElementById('regionBadge');
     if (badge) badge.textContent = currentRegion.flag + ' ' + currentRegion.name;
@@ -1977,9 +2036,9 @@
     applyRegionPricing();
     updatePaymentMethods();
     updatePricingCards();
+    refreshServiceButtonPrices();
     const badge = document.getElementById('regionBadge');
     if (badge) badge.textContent = currentRegion.flag + ' ' + currentRegion.name;
-    // Update selector label
     const sel = document.getElementById('regionSelector');
     if (sel) sel.querySelector('div').textContent = '🌍 Your Region: ' + currentRegion.flag + ' ' + currentRegion.name;
   }
