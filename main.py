@@ -14,7 +14,7 @@ app = FastAPI(title="Coach Hala Booking API", version="1.0.0")
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Replace with your Vercel URL in production e.g. ["https://yoursite.vercel.app"]
-    allow_credentials=True,
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
