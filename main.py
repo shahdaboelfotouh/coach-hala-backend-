@@ -227,6 +227,39 @@ def get_bookings(status: Optional[str] = None, secret: str = ""):
 #  EMAIL HELPERS
 # ══════════════════════════════════════════
 
+def _send_formspree_notification(b, booking_id: str):
+    confirm_url = f"{BACKEND_URL}/confirm/{booking_id}"
+    decline_url = f"{BACKEND_URL}/decline/{booking_id}"
+    try:
+        import urllib.request, json as json_lib
+        data = json_lib.dumps({
+            "_subject": f"NEW BOOKING: {b.service} - {b.client_name}",
+            "client_name": b.client_name,
+            "client_email": b.client_email,
+            "client_phone": b.client_phone,
+            "service": b.service,
+            "format": b.format,
+            "date_time": f"{b.date} at {b.time}",
+            "amount": f"EGP {b.amount:,}",
+            "payment_type": "50% Deposit" if b.deposit else "Full Payment",
+            "pay_method": b.pay_method,
+            "notes": b.notes or "None",
+            "confirm_link": confirm_url,
+            "decline_link": decline_url,
+            "_replyto": b.client_email,
+        }).encode()
+        req = urllib.request.Request(
+            f"https://formspree.io/f/{FORMSPREE_BOOKING}",
+            data=data,
+            headers={"Content-Type": "application/json", "Accept": "application/json"},
+            method="POST"
+        )
+        urllib.request.urlopen(req, timeout=5)
+        print(f"Formspree notification sent for {booking_id}")
+    except Exception as e:
+        print(f"Formspree failed: {e}")
+
+
 def _send_coach_notification(b: BookingRequest, booking_id: str):
     confirm_url = f"{BACKEND_URL}/confirm/{booking_id}"
     decline_url = f"{BACKEND_URL}/decline/{booking_id}"
@@ -328,4 +361,4 @@ def _send_client_declined(b: dict):
             <p>Warm regards,<br><b>Coach Hala El Shahawy</b></p>
           </div>
         </div>"""
-    })
+    })v
