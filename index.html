@@ -5,6 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Coach Hala El Shahawy — Life Coaching</title>
 <meta name="description" content="Certified ICF Life Coach in Cairo, Egypt. Book personal coaching sessions for career, mindset, relationships, and well-being. In-Person & Zoom available.">
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script>emailjs.init("YOUR_EMAILJS_PUBLIC_KEY");</script>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Inter:wght@300;400;500;600&family=Cairo:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -2187,29 +2189,57 @@
         : booking.date + ' at ' + booking.time;
       document.getElementById('suc-amount').textContent = 'EGP ' + paid.toLocaleString() + (booking.deposit === 'half' ? ' (50% Deposit)' : ' (Full)');
 
-      // Also send directly to Formspree from frontend as guaranteed backup
+      // Send professional notification via Web3Forms
       try {
-        await fetch('https://formspree.io/f/mjgqrwla', {
+        const confirmUrl = 'https://web-production-43aee.up.railway.app/confirm/' + (data.booking_id || 'unknown');
+        const declineUrl = 'https://web-production-43aee.up.railway.app/decline/' + (data.booking_id || 'unknown');
+        const dateDisplay = isPackage ? '4 sessions — to be scheduled via WhatsApp after confirmation' : booking.date + ' at ' + booking.time;
+
+        await fetch('https://api.web3forms.com/submit', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
           body: JSON.stringify({
-            _subject: '🗓 NEW BOOKING: ' + booking.serviceName + ' — ' + name,
-            client_name: name,
-            client_email: email,
-            client_phone: phone,
-            service: booking.serviceName,
-            format: booking.formatName,
-            specialty: booking.specialtyName,
-            date_time: isPackage ? '4 sessions - to be scheduled via WhatsApp' : booking.date + ' at ' + booking.time,
-            amount: 'EGP ' + paid.toLocaleString(),
-            payment_type: booking.deposit === 'half' ? '50% Deposit' : 'Full Payment',
-            pay_method: payMethod,
-            instapay_ref: ipaRef || 'N/A',
-            notes: notes || 'None',
-            _replyto: email,
+            access_key: '25468461-5370-4193-8efe-2804dc3593e8',
+            subject: '🗓 NEW BOOKING REQUEST: ' + booking.serviceName + ' — ' + name,
+            from_name: 'Coach Hala Booking System',
+            replyto: email,
+            message:
+              '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
+              '⚡ ACTION REQUIRED — Please REPLY to this email to confirm or decline\n' +
+              '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n\n' +
+              '✅ TO CONFIRM — Reply:\n' +
+              '"Your session is confirmed! See you on [date] at [time].\n' +
+              (booking.formatName === 'Zoom Call' ? '[Add your Zoom link here]"\n\n' : '[Your location/address]"\n\n') +
+              '❌ TO DECLINE — Reply:\n' +
+              '"Unfortunately I cannot confirm this slot. Please visit the website to choose another time."\n\n' +
+              '─────────────────────────────────────────\n' +
+              '👤 CLIENT DETAILS\n' +
+              '─────────────────────────────────────────\n' +
+              'Name:     ' + name + '\n' +
+              'Email:    ' + email + '\n' +
+              'Phone:    ' + phone + '\n\n' +
+              '─────────────────────────────────────────\n' +
+              '📅 SESSION DETAILS\n' +
+              '─────────────────────────────────────────\n' +
+              'Service:  ' + booking.serviceName + '\n' +
+              'Format:   ' + booking.formatName + '\n' +
+              'Date/Time:' + dateDisplay + '\n\n' +
+              '─────────────────────────────────────────\n' +
+              '💳 PAYMENT\n' +
+              '─────────────────────────────────────────\n' +
+              'Method:   ' + payMethod + '\n' +
+              'Type:     ' + (booking.deposit === 'half' ? '50% Deposit' : 'Full Payment') + '\n' +
+              'Amount:   EGP ' + paid.toLocaleString() + '\n' +
+              (ipaRef ? 'Ref:      ' + ipaRef + '\n' : '') +
+              (remaining > 0 ? 'Balance:  EGP ' + remaining.toLocaleString() + ' (due 24h before session)\n' : '') +
+              '\n' +
+              (notes ? '─────────────────────────────────────────\n📝 CLIENT NOTES\n─────────────────────────────────────────\n' + notes + '\n\n' : '') +
+              '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n' +
+              'Reply to this email to respond directly to the client.\n' +
+              '━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
           })
         });
-      } catch(fe) { console.log('Formspree direct:', fe); }
+      } catch(fe) { console.log('Web3Forms notification:', fe); }
 
       showNotification('Booking submitted! Coach Hala has been notified. 🎉');
       showPage('success');
