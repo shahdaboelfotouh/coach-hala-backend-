@@ -1103,17 +1103,17 @@
     <p class="section-subtitle center">EGP 700/hour · Sessions up to 2.5 hours · Bundles save you more. All prices in Egyptian Pounds.</p>
     <div class="pricing-grid">
       <div class="price-card">
-        <div class="price-name">1 Hour Session</div>
+        <div class="price-name">Single Session</div>
         <div class="price-amount">700</div>
-        <div class="price-period">EGP · 1 Hour</div>
-        <div class="price-desc">A focused single session. Perfect for gaining clarity on one topic. In-Person or Zoom.</div>
+        <div class="price-period">EGP · 45 min – 1 Hour</div>
+        <div class="price-desc">A focused single session (45 min to 1 hour). Perfect for gaining clarity. In-Person or Zoom.</div>
         <button class="btn-book" onclick="selectServiceAndBook('session-1hr')">Book Now</button>
       </div>
       <div class="price-card">
-        <div class="price-name">2 Hour Session</div>
+        <div class="price-name">Double Session</div>
         <div class="price-amount">1,400</div>
-        <div class="price-period">EGP · 2 Hours</div>
-        <div class="price-desc">An extended immersive session for deeper work and complex challenges.</div>
+        <div class="price-period">EGP · Up to 1.5 Hours</div>
+        <div class="price-desc">Up to 1.5 hours billed as 2 sessions. For deeper work and complex challenges.</div>
         <button class="btn-book" onclick="selectServiceAndBook('session-2hr')">Book Now</button>
       </div>
       <div class="price-card featured">
@@ -1304,23 +1304,23 @@
   <section>
     <div class="section-eyebrow center">All Services</div>
     <h1 class="section-title center">Coaching Services &amp; Pricing</h1>
-    <p class="section-subtitle center">EGP 700/hour · Sessions available from 1 to 2.5 hours · Bundles offer real savings and committed growth.</p>
+    <p class="section-subtitle center">EGP 700/session · Sessions from 45 minutes to 1.5 hours · Packages of 4 sessions available.</p>
 
     <!-- INDIVIDUAL SESSIONS -->
     <h3 style="font-size:1.35rem;color:var(--charcoal);margin-bottom:1.25rem">Individual Sessions</h3>
     <div class="pricing-grid" style="margin-bottom:3rem">
       <div class="price-card">
-        <div class="price-name">1 Hour Session</div>
+        <div class="price-name">Single Session</div>
         <div class="price-amount">700</div>
-        <div class="price-period">EGP · 1 Hour</div>
-        <div class="price-desc">A focused single session to explore a topic, gain clarity, or work on a specific goal. In-Person or Zoom.</div>
+        <div class="price-period">EGP · 45 min – 1 Hour</div>
+        <div class="price-desc">A focused single session (45 min to 1 hour). Explore a topic, gain clarity, or work on a specific goal. In-Person or Zoom.</div>
         <button class="btn-book" onclick="selectServiceAndBook('session-1hr')">Book This Session</button>
       </div>
       <div class="price-card">
-        <div class="price-name">2 Hour Session</div>
+        <div class="price-name">Double Session</div>
         <div class="price-amount">1,400</div>
-        <div class="price-period">EGP · 2 Hours</div>
-        <div class="price-desc">An extended immersive session for complex challenges, deeper work, or major life transitions.</div>
+        <div class="price-period">EGP · Up to 1.5 Hours (= 2 sessions)</div>
+        <div class="price-desc">Need more time? Book a double session (up to 1.5 hours). Billed as 2 sessions. In-Person or Zoom.</div>
         <button class="btn-book" onclick="selectServiceAndBook('session-2hr')">Book This Session</button>
       </div>
     </div>
@@ -1438,10 +1438,10 @@
           <div class="step-content">
             <div class="option-grid">
               <button class="option-btn" data-svc="session-1hr" onclick="selectServiceOption(this)">
-                <span class="opt-label">1 Hour Session</span><span class="opt-sub svc-price" data-svc="session-1hr">1 Hour</span>
+                <span class="opt-label">Single Session</span><span class="opt-sub svc-price" data-svc="session-1hr">45 min – 1hr</span>
               </button>
               <button class="option-btn" data-svc="session-2hr" onclick="selectServiceOption(this)">
-                <span class="opt-label">2 Hour Session</span><span class="opt-sub svc-price" data-svc="session-2hr">2 Hours</span>
+                <span class="opt-label">Double Session</span><span class="opt-sub svc-price" data-svc="session-2hr">Up to 1.5hrs</span>
               </button>
               <button class="option-btn" data-svc="stress-pkg" onclick="selectServiceOption(this)">
                 <span class="opt-label">جلسات الضغوط النفسية</span><span class="opt-sub svc-price" data-svc="stress-pkg">4×1hr</span>
@@ -2048,6 +2048,22 @@
   // ── REAL BACKEND URL ──
   const BACKEND = 'https://web-production-43aee.up.railway.app';
 
+  // ── FORMSPREE — primary notification email ──
+  const FORMSPREE_BOOKING_ID = 'mjgqrwla';
+
+  async function sendFormspreeNotification(data) {
+    try {
+      await fetch('https://formspree.io/f/' + FORMSPREE_BOOKING_ID, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(data)
+      });
+      console.log('Formspree notification sent');
+    } catch(e) {
+      console.warn('Formspree failed:', e);
+    }
+  }
+
   async function apiCall(path, options = {}) {
     // Try direct first, fall back to CORS proxy
     try {
@@ -2137,6 +2153,24 @@
         return;
       }
 
+      // Send Formspree notification (guaranteed delivery to halalife81@gmail.com)
+      await sendFormspreeNotification({
+        _subject:     'NEW BOOKING: ' + booking.serviceName + ' — ' + name,
+        client_name:  name,
+        client_email: email,
+        client_phone: phone,
+        service:      booking.serviceName,
+        format:       booking.formatName,
+        specialty:    booking.specialtyName,
+        date_time:    isPackage ? 'Package — sessions to be scheduled via WhatsApp' : (booking.date + ' at ' + booking.time),
+        amount:       currentRegion.symbol + ' ' + paid.toLocaleString(),
+        payment_type: booking.deposit === 'half' ? '50% Deposit' : 'Full Payment',
+        pay_method:   payMethod,
+        instapay_ref: ipaRef || 'N/A',
+        notes:        notes || 'None',
+        _replyto:     email,
+      });
+
       // Success!
       if (!isPackage) {
         if (!bookedSlots[booking.dateKey]) bookedSlots[booking.dateKey] = [];
@@ -2152,6 +2186,30 @@
         ? '4 sessions — Coach Hala will WhatsApp you to schedule'
         : booking.date + ' at ' + booking.time;
       document.getElementById('suc-amount').textContent = 'EGP ' + paid.toLocaleString() + (booking.deposit === 'half' ? ' (50% Deposit)' : ' (Full)');
+
+      // Also send directly to Formspree from frontend as guaranteed backup
+      try {
+        await fetch('https://formspree.io/f/mjgqrwla', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+          body: JSON.stringify({
+            _subject: '🗓 NEW BOOKING: ' + booking.serviceName + ' — ' + name,
+            client_name: name,
+            client_email: email,
+            client_phone: phone,
+            service: booking.serviceName,
+            format: booking.formatName,
+            specialty: booking.specialtyName,
+            date_time: isPackage ? '4 sessions - to be scheduled via WhatsApp' : booking.date + ' at ' + booking.time,
+            amount: 'EGP ' + paid.toLocaleString(),
+            payment_type: booking.deposit === 'half' ? '50% Deposit' : 'Full Payment',
+            pay_method: payMethod,
+            instapay_ref: ipaRef || 'N/A',
+            notes: notes || 'None',
+            _replyto: email,
+          })
+        });
+      } catch(fe) { console.log('Formspree direct:', fe); }
 
       showNotification('Booking submitted! Coach Hala has been notified. 🎉');
       showPage('success');
@@ -2251,7 +2309,7 @@
 
   const SVC_META = {
     'session-1hr':      {label:'Single Session (up to 1hr)',              sub:'1 session · 45–60 min',  labelAr:'جلسة فردية (حتى ساعة)',               price:700,  isPackage:false},
-    'session-2hr':      {label:'Double Session (up to 1.5hrs)',            sub:'2 sessions · billed ×2', labelAr:'جلستان (حتى ساعة ونصف)',              price:1400, isPackage:false},
+    'session-2hr':      {label:'Double Session (up to 1.5hrs)',            sub:'up to 1.5hrs · billed ×2', labelAr:'جلستان (حتى ساعة ونصف)',            price:1400, isPackage:false},
     'stress-pkg':       {label:'Stress & Psychological Pressure Package',  sub:'4 sessions · max 1hr each', labelAr:'جلسات التعامل مع الضغوط النفسية',  price:2660, isPackage:true},
     'values-pkg':       {label:'Values Discovery & Activation Package',    sub:'4 sessions · max 1hr each', labelAr:'جلسات اكتشاف القيم وتفعيلها في الحياة', price:2660, isPackage:true},
     'career-pkg':       {label:'Finding Career & Passion Package',         sub:'4 sessions · max 1hr each', labelAr:'جلسات إيجاد العمل المناسب والشغف',  price:2660, isPackage:true},
