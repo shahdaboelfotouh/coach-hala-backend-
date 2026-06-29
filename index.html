@@ -88,6 +88,94 @@
   .bank-box p { font-size: .83rem; opacity: .85; line-height: 1.6; margin-bottom: .5rem; }
   .bank-detail { background: rgba(255,255,255,.15); border-radius: 8px; padding: .65rem 1rem; margin: .35rem 0; font-size: .88rem; font-weight: 600; }
 
+
+  /* ══════════════════════════════════════
+     KIDS MODE STYLES
+  ══════════════════════════════════════ */
+  .mode-toggle-bar {
+    position: fixed; top: 70px; left: 0; right: 0; z-index: 998;
+    background: var(--white); border-bottom: 2px solid var(--border);
+    display: flex; justify-content: center; align-items: center;
+    padding: .5rem 1rem; gap: .5rem;
+    box-shadow: 0 2px 12px rgba(0,0,0,.06);
+  }
+  .mode-btn {
+    padding: .5rem 1.5rem; border-radius: 100px; border: 2px solid var(--border);
+    background: transparent; cursor: pointer; font-family: inherit;
+    font-size: .85rem; font-weight: 700; transition: all var(--transition);
+    display: flex; align-items: center; gap: .4rem;
+  }
+  .mode-btn.active-adults {
+    background: linear-gradient(135deg, var(--violet), var(--coral));
+    color: white; border-color: transparent;
+  }
+  .mode-btn.active-kids {
+    background: linear-gradient(135deg, #FF6B9D, #FFB347);
+    color: white; border-color: transparent;
+    animation: kidsBounce .5s ease;
+  }
+  @keyframes kidsBounce {
+    0%,100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+  }
+  body.kids-mode {
+    --coral: #FF6B9D;
+    --coral-dk: #E8558A;
+    --coral-lt: #FF8BB3;
+    --violet: #7B5EA7;
+    --sunny: #FFB347;
+    --sunny-lt: #FFC96A;
+    --mint: #4CB08A;
+    --bg: #FFF5FB;
+    --sand: #FFF0F7;
+    --sand-dk: #FFD6EC;
+    --border: #FFCCE8;
+  }
+  body.kids-mode nav { background: rgba(255,245,251,.97); }
+  body.kids-mode .nav-logo { color: #E8558A; }
+  body.kids-mode .page { padding-top: 40px; } /* extra space for toggle bar */
+
+  /* Kids card styles */
+  .kids-card {
+    background: var(--white); border: 2.5px solid var(--border);
+    border-radius: 20px; padding: 2rem; text-align: center;
+    transition: all var(--transition); position: relative; overflow: hidden;
+    cursor: pointer;
+  }
+  .kids-card:hover { transform: translateY(-6px) rotate(1deg); box-shadow: 0 16px 40px rgba(255,107,157,.2); }
+  .kids-card .kids-emoji { font-size: 3rem; margin-bottom: .75rem; display: block; }
+  .kids-card h3 { font-size: 1.1rem; color: var(--charcoal); margin-bottom: .4rem; font-family: 'Cairo', sans-serif; }
+  .kids-card p { font-size: .85rem; color: var(--mid); line-height: 1.6; }
+  .kids-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.25rem; }
+
+  .kids-hero {
+    min-height: 80vh;
+    background: linear-gradient(135deg, #FF6B9D 0%, #FFB347 50%, #7B5EA7 100%);
+    display: flex; align-items: center; justify-content: center;
+    text-align: center; padding: 120px 5vw 60px;
+    position: relative; overflow: hidden;
+  }
+  .kids-hero .floating { animation: float 3s ease-in-out infinite; display: inline-block; }
+  .kids-hero .floating:nth-child(2) { animation-delay: .5s; }
+  .kids-hero .floating:nth-child(3) { animation-delay: 1s; }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-12px); }
+  }
+  .kids-blob { position: absolute; border-radius: 50%; pointer-events: none; opacity: .15; }
+  .kids-age-badge {
+    display: inline-flex; align-items: center; gap: .5rem;
+    background: rgba(255,255,255,.25); border: 2px solid rgba(255,255,255,.5);
+    color: white; padding: .5rem 1.25rem; border-radius: 100px;
+    font-size: .85rem; font-weight: 700; margin-bottom: 1.5rem;
+  }
+  .kids-stat {
+    background: rgba(255,255,255,.2); border-radius: 16px;
+    padding: 1rem 1.5rem; text-align: center;
+  }
+  .kids-stat .num { font-size: 2rem; font-weight: 800; color: white; line-height: 1; }
+  .kids-stat .lbl { font-size: .75rem; color: rgba(255,255,255,.8); margin-top: .2rem; }
+
   /* ── NAV ── */
   nav {
     position: fixed; top: 0; left: 0; right: 0; z-index: 999;
@@ -583,6 +671,321 @@
     </div>
   </div>
 </nav>
+
+<!-- MODE TOGGLE BAR -->
+<div class="mode-toggle-bar" id="modeToggleBar">
+  <button class="mode-btn active-adults" id="btnAdults" onclick="switchMode('adults')">
+    👤 <span id="adultsBtnTxt">For Adults</span>
+  </button>
+  <button class="mode-btn" id="btnKids" onclick="switchMode('kids')">
+    🧒 <span id="kidsBtnTxt">For Kids</span>
+  </button>
+</div>
+
+<!-- ═══════ KIDS HOME ═══════ -->
+<div id="page-kids-home" class="page" style="display:none">
+
+  <!-- Kids Hero -->
+  <section class="kids-hero">
+    <div class="kids-blob" style="width:300px;height:300px;background:#fff;top:-100px;right:-80px"></div>
+    <div class="kids-blob" style="width:200px;height:200px;background:#FFB347;bottom:-60px;left:-40px"></div>
+    <div style="z-index:1;max-width:700px">
+      <div style="font-size:3rem;margin-bottom:1rem">
+        <span class="floating">🌟</span>
+        <span class="floating">🧠</span>
+        <span class="floating">💪</span>
+        <span class="floating">🎯</span>
+        <span class="floating">❤️</span>
+      </div>
+      <div class="kids-age-badge">🧒 <span id="kidsAgeBadge">For Kids — From 7 Years Old</span></div>
+      <h1 style="font-size:clamp(2rem,5vw,3.5rem);color:white;font-weight:800;margin-bottom:.75rem;font-family:'Cairo',sans-serif" id="kidsHeroTitle">
+        A Safe Space for Your Child to Grow 🌱
+      </h1>
+      <p style="font-size:1.1rem;color:rgba(255,255,255,.9);margin-bottom:2rem;font-family:'Cairo',sans-serif" id="kidsHeroSub">
+        Specialized coaching for children aged 7+ — building resilience, confidence, and emotional strength.
+      </p>
+      <button class="btn-primary" onclick="showPage('kids-booking')" style="font-size:1rem;padding:1rem 2.5rem;border-radius:100px">
+        🌟 <span id="kidsBookBtn">Book a Kids Session</span>
+      </button>
+      <div style="display:flex;gap:1.5rem;justify-content:center;margin-top:2.5rem;flex-wrap:wrap">
+        <div class="kids-stat">
+          <div class="num">7+</div>
+          <div class="lbl" id="kidsStatAge">Years Old</div>
+        </div>
+        <div class="kids-stat">
+          <div class="num">🇪🇬</div>
+          <div class="lbl" id="kidsStatLocation">Cairo, Egypt</div>
+        </div>
+        <div class="kids-stat">
+          <div class="num">ICF</div>
+          <div class="lbl" id="kidsStatCert">Certified Coach</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kids Specialties -->
+  <section style="background:var(--white)">
+    <div class="section-eyebrow center" id="kidsSpecEyebrow">What We Work On</div>
+    <h2 class="section-title center" id="kidsSpecTitle">Coaching Specialties for Kids</h2>
+    <p class="section-subtitle center" id="kidsSpecSub">Every child is unique. Sessions are playful, safe, and completely adapted to your child's needs and personality.</p>
+    <div class="kids-grid">
+      <div class="kids-card" onclick="showPage('kids-booking')">
+        <span class="kids-emoji">💪</span>
+        <h3 id="kc1">Building Resilience</h3>
+        <p id="kc1d">المرونة النفسية في مواجهة التحديات — Helping kids bounce back from difficulties and face challenges with confidence.</p>
+      </div>
+      <div class="kids-card" onclick="showPage('kids-booking')">
+        <span class="kids-emoji">😰</span>
+        <h3 id="kc2">Managing Stress & Anxiety</h3>
+        <p id="kc2d">التعامل مع الضغوط النفسية — Teaching children healthy tools to handle worry, pressure, and emotional overwhelm.</p>
+      </div>
+      <div class="kids-card" onclick="showPage('kids-booking')">
+        <span class="kids-emoji">💔</span>
+        <h3 id="kc3">Coping with Loss & Grief</h3>
+        <p id="kc3d">التعامل مع الفقد — Supporting children through loss, separation, or major life changes with care and age-appropriate tools.</p>
+      </div>
+      <div class="kids-card" onclick="showPage('kids-booking')">
+        <span class="kids-emoji">👨‍👩‍👧</span>
+        <h3 id="kc4">After Parental Separation</h3>
+        <p id="kc4d">دعم الأطفال بعد الانفصال الأبوي — Specialized sessions to help children navigate parental divorce or separation with emotional safety.</p>
+      </div>
+      <div class="kids-card" onclick="showPage('kids-booking')">
+        <span class="kids-emoji">🎯</span>
+        <h3 id="kc5">Boosting Productivity</h3>
+        <p id="kc5d">زيادة الإنتاجية — Building focus, motivation, and healthy study habits for school and personal goals.</p>
+      </div>
+      <div class="kids-card" onclick="showPage('kids-booking')">
+        <span class="kids-emoji">✨</span>
+        <h3 id="kc6">Discovering Values & Purpose</h3>
+        <p id="kc6d">اكتشاف القيم وتفعيلها في الحياة — Helping children identify what truly matters to them and live with intention.</p>
+      </div>
+      <div class="kids-card" onclick="showPage('kids-booking')">
+        <span class="kids-emoji">🌟</span>
+        <h3 id="kc7">Finding Passion & Goals</h3>
+        <p id="kc7d">إيجاد الشغف والهدف — Guiding kids to explore their strengths, interests, and future direction with excitement.</p>
+      </div>
+      <div class="kids-card" onclick="showPage('kids-booking')">
+        <span class="kids-emoji">🔄</span>
+        <h3 id="kc8">Adapting to Change</h3>
+        <p id="kc8d">التكيف مع التغيير — Coaching children through big transitions like moving schools, new siblings, or family changes.</p>
+      </div>
+      <div class="kids-card" onclick="showPage('kids-booking')" style="background:linear-gradient(135deg,#FF6B9D,#FFB347);color:white;border:none">
+        <span class="kids-emoji">🚀</span>
+        <h3 style="color:white" id="kc9">Ready to Begin?</h3>
+        <p style="color:rgba(255,255,255,.9)" id="kc9d">Every child deserves to feel seen, heard, and empowered. Book a session today!</p>
+        <br>
+        <button class="btn-primary" onclick="showPage('kids-booking')" style="width:100%;border-radius:100px">
+          <span id="kidsBookBtn2">Book Now 🌟</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Kids Pricing -->
+  <section style="background:var(--sand)">
+    <div class="section-eyebrow center" id="kidsPriceEyebrow">Simple, Transparent Pricing</div>
+    <h2 class="section-title center" id="kidsPriceTitle">Kids Session Pricing</h2>
+    <p class="section-subtitle center" id="kidsPriceSub">Same rates as adult sessions. All sessions are 1-on-1 with Coach Hala, face-to-face or via Zoom.</p>
+    <div class="pricing-grid" style="max-width:800px;margin:0 auto">
+      <div class="price-card">
+        <div class="price-name" id="kp1n">Discovery Session</div>
+        <div class="price-amount" id="kp1p">700</div>
+        <div class="price-period">EGP · 1 Hour</div>
+        <div class="price-desc" id="kp1d">A first session to understand your child's world, needs, and goals. In-Person or Zoom.</div>
+        <button class="btn-book" onclick="showPage('kids-booking')"><span id="kp1b">Book Now</span></button>
+      </div>
+      <div class="price-card featured">
+        <div class="price-badge" id="kpBadge">Most Popular</div>
+        <div class="price-name" id="kp2n">Growth Package</div>
+        <div class="price-amount" id="kp2p">3,800</div>
+        <div class="price-period">EGP · 6 Sessions × 1 Hour</div>
+        <div class="price-savings" id="kp2s">Save EGP 400</div>
+        <div class="price-desc" id="kp2d">Six sessions for deep, lasting change — the most effective way to support your child.</div>
+        <button class="btn-book" onclick="showPage('kids-booking')"><span id="kp2b">Book Package</span></button>
+      </div>
+      <div class="price-card">
+        <div class="price-name" id="kp3n">Deep Dive Session</div>
+        <div class="price-amount" id="kp3p">1,400</div>
+        <div class="price-period">EGP · 2 Hours</div>
+        <div class="price-desc" id="kp3d">An extended session for more complex emotional needs or deeper exploratory work.</div>
+        <button class="btn-book" onclick="showPage('kids-booking')"><span id="kp3b">Book Now</span></button>
+      </div>
+    </div>
+  </section>
+
+  <!-- Parent Note -->
+  <section style="background:var(--white)">
+    <div style="max-width:700px;margin:0 auto;text-align:center">
+      <div style="font-size:3rem;margin-bottom:1rem">💌</div>
+      <h2 class="section-title" id="kidsParentTitle">A Note for Parents</h2>
+      <p style="color:var(--mid);line-height:1.8;margin-bottom:1.5rem" id="kidsParentNote">
+        All kids sessions are conducted in a completely safe, confidential, and child-friendly environment. 
+        Parents are welcome to join the first 10 minutes of each session. 
+        Coach Hala has experience working with children from age 7 and adapts every session to your child's personality, language, and comfort level.
+      </p>
+      <div style="display:flex;gap:1rem;justify-content:center;flex-wrap:wrap">
+        <div style="background:var(--sand);border-radius:12px;padding:1rem 1.5rem;font-size:.88rem;color:var(--charcoal)">🔒 <b id="kNote1">100% Confidential</b></div>
+        <div style="background:var(--sand);border-radius:12px;padding:1rem 1.5rem;font-size:.88rem;color:var(--charcoal)">🎮 <b id="kNote2">Playful & Engaging</b></div>
+        <div style="background:var(--sand);border-radius:12px;padding:1rem 1.5rem;font-size:.88rem;color:var(--charcoal)">📍 <b id="kNote3">In-Person or Zoom</b></div>
+        <div style="background:var(--sand);border-radius:12px;padding:1rem 1.5rem;font-size:.88rem;color:var(--charcoal)">🧒 <b id="kNote4">From Age 7</b></div>
+      </div>
+      <div style="margin-top:2rem">
+        <button class="btn-primary" onclick="showPage('kids-booking')" style="margin-right:.75rem">
+          🌟 <span id="kidsBookBtn3">Book a Kids Session</span>
+        </button>
+        <button class="btn-outline" onclick="showPage('contact')" style="border-color:var(--coral);color:var(--coral);border-radius:100px">
+          <span id="kidsContactBtn">Contact Coach Hala</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+</div><!-- /kids-home -->
+
+<!-- ═══════ KIDS BOOKING ═══════ -->
+<div id="page-kids-booking" class="page" style="display:none">
+  <div style="height:110px"></div>
+  <section>
+    <div class="section-eyebrow" id="kbEyebrow">Book a Kids Session</div>
+    <h1 class="section-title" id="kbTitle">Schedule Your Child's Session 🌟</h1>
+    <p class="section-subtitle" id="kbSub">Choose a specialty, pick a time, and let's get started on your child's growth journey.</p>
+
+    <div class="booking-layout">
+      <div>
+        <!-- Step 1: Specialty -->
+        <div class="booking-steps">
+          <div class="step-header">
+            <div class="step-num">1</div>
+            <div class="step-title" id="kbStep1">Choose a Focus Area</div>
+          </div>
+          <div class="step-content">
+            <div class="kids-grid" style="gap:.65rem">
+              <button class="kids-card" style="padding:1rem;border-radius:12px" onclick="selectKidsSpecialty('resilience', this)">
+                <span class="kids-emoji" style="font-size:1.75rem">💪</span>
+                <h3 style="font-size:.9rem" id="ks1">Building Resilience</h3>
+              </button>
+              <button class="kids-card" style="padding:1rem;border-radius:12px" onclick="selectKidsSpecialty('stress', this)">
+                <span class="kids-emoji" style="font-size:1.75rem">😰</span>
+                <h3 style="font-size:.9rem" id="ks2">Stress & Anxiety</h3>
+              </button>
+              <button class="kids-card" style="padding:1rem;border-radius:12px" onclick="selectKidsSpecialty('grief', this)">
+                <span class="kids-emoji" style="font-size:1.75rem">💔</span>
+                <h3 style="font-size:.9rem" id="ks3">Loss & Grief</h3>
+              </button>
+              <button class="kids-card" style="padding:1rem;border-radius:12px" onclick="selectKidsSpecialty('separation', this)">
+                <span class="kids-emoji" style="font-size:1.75rem">👨‍👩‍👧</span>
+                <h3 style="font-size:.9rem" id="ks4">Parental Separation</h3>
+              </button>
+              <button class="kids-card" style="padding:1rem;border-radius:12px" onclick="selectKidsSpecialty('productivity', this)">
+                <span class="kids-emoji" style="font-size:1.75rem">🎯</span>
+                <h3 style="font-size:.9rem" id="ks5">Productivity</h3>
+              </button>
+              <button class="kids-card" style="padding:1rem;border-radius:12px" onclick="selectKidsSpecialty('values', this)">
+                <span class="kids-emoji" style="font-size:1.75rem">✨</span>
+                <h3 style="font-size:.9rem" id="ks6">Values & Purpose</h3>
+              </button>
+              <button class="kids-card" style="padding:1rem;border-radius:12px" onclick="selectKidsSpecialty('passion', this)">
+                <span class="kids-emoji" style="font-size:1.75rem">🌟</span>
+                <h3 style="font-size:.9rem" id="ks7">Passion & Goals</h3>
+              </button>
+              <button class="kids-card" style="padding:1rem;border-radius:12px" onclick="selectKidsSpecialty('change', this)">
+                <span class="kids-emoji" style="font-size:1.75rem">🔄</span>
+                <h3 style="font-size:.9rem" id="ks8">Adapting to Change</h3>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 2: Format -->
+        <div class="booking-steps" style="margin-top:1rem">
+          <div class="step-header">
+            <div class="step-num">2</div>
+            <div class="step-title" id="kbStep2">Session Format</div>
+          </div>
+          <div class="step-content">
+            <div class="option-grid">
+              <button class="option-btn" onclick="selectOption('format','zoom',this,'Zoom Call','Online',0)">
+                <span class="opt-label">📹 Zoom Call</span>
+                <span class="opt-sub">Online — from home</span>
+              </button>
+              <button class="option-btn" onclick="selectOption('format','inperson',this,'In-Person','Cairo',0)">
+                <span class="opt-label">🏢 In-Person</span>
+                <span class="opt-sub">Cairo — location shared on confirmation</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 3: Duration -->
+        <div class="booking-steps" style="margin-top:1rem">
+          <div class="step-header">
+            <div class="step-num">3</div>
+            <div class="step-title" id="kbStep3">Session Duration</div>
+          </div>
+          <div class="step-content">
+            <div class="option-grid">
+              <button class="option-btn" data-svc="session-1hr" onclick="selectServiceOption(this)">
+                <span class="opt-label">1 Hour</span>
+                <span class="opt-sub svc-price" data-svc="session-1hr">1 Hour</span>
+              </button>
+              <button class="option-btn" data-svc="session-2hr" onclick="selectServiceOption(this)">
+                <span class="opt-label">2 Hours</span>
+                <span class="opt-sub svc-price" data-svc="session-2hr">2 Hours</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Step 4: Calendar (reuse same calendar) -->
+        <div class="booking-steps" style="margin-top:1rem">
+          <div class="step-header">
+            <div class="step-num">4</div>
+            <div class="step-title" id="kbStep4">Pick a Date & Time</div>
+          </div>
+          <div class="step-content">
+            <div class="cal-header">
+              <button class="cal-nav" onclick="changeMonth(-1)">‹</button>
+              <div class="cal-month" id="calMonthKids"></div>
+              <button class="cal-nav" onclick="changeMonth(1)">›</button>
+            </div>
+            <div class="cal-grid" id="calGridKids"></div>
+            <div id="timeSlotSectionKids" style="display:none;margin-top:1.4rem">
+              <div style="font-size:.83rem;font-weight:700;color:var(--charcoal);margin-bottom:.5rem">
+                Available Times — <span id="selectedDateLabelKids"></span>
+              </div>
+              <div class="slots-grid" id="slotsGridKids"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sidebar -->
+      <div>
+        <div class="booking-summary" style="top:120px">
+          <div style="text-align:center;font-size:2rem;margin-bottom:.5rem">🌟</div>
+          <div class="summary-title" id="kbSumTitle">Kids Session Summary</div>
+          <div class="summary-row"><span class="label" id="kbSumSpec">Focus Area</span><span class="val" id="sum-kids-specialty">—</span></div>
+          <div class="summary-row"><span class="label">Format</span><span class="val" id="sum-kids-format">—</span></div>
+          <div class="summary-row"><span class="label">Duration</span><span class="val" id="sum-kids-service">—</span></div>
+          <div class="summary-row"><span class="label">Date & Time</span><span class="val" id="sum-kids-datetime">—</span></div>
+          <div class="summary-total">
+            <div class="summary-row" style="border:none;padding:.15rem 0">
+              <span class="label">Total</span>
+              <span class="val" id="sum-kids-price" style="font-size:1.45rem;font-family:'Cormorant Garamond',serif;color:var(--coral)">—</span>
+            </div>
+          </div>
+          <button class="pay-btn" id="kidsBookingBtn" onclick="proceedToKidsCheckout()" disabled style="background:linear-gradient(135deg,#FF6B9D,#FFB347);border:none">
+            Continue to Checkout 🌟
+          </button>
+          <div style="margin-top:.85rem;padding:.85rem;background:var(--sand);border-radius:8px;font-size:.76rem;color:var(--mid)">
+            🔒 Safe, confidential, and child-friendly sessions.
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div><!-- /kids-booking -->
 
 <!-- ═══════ HOME ═══════ -->
 <div id="page-home" class="page active">
@@ -1943,7 +2346,270 @@
 
   // ── INIT ──
   renderCalendar();
+  renderKidsCalendar();
   detectRegion();
+
+  // ══════════════════════════════════════════
+  //  KIDS MODE
+  // ══════════════════════════════════════════
+
+  let currentMode = 'adults'; // 'adults' or 'kids'
+  let kidsBooking = { specialty: null, specialtyName: '' };
+
+  function switchMode(mode) {
+    currentMode = mode;
+    document.body.classList.toggle('kids-mode', mode === 'kids');
+
+    const btnAdults = document.getElementById('btnAdults');
+    const btnKids   = document.getElementById('btnKids');
+    if (btnAdults) {
+      btnAdults.className = 'mode-btn' + (mode === 'adults' ? ' active-adults' : '');
+      btnKids.className   = 'mode-btn' + (mode === 'kids'   ? ' active-kids' : '');
+    }
+
+    if (mode === 'kids') {
+      showKidsPage('kids-home');
+    } else {
+      showPage('home');
+    }
+
+    // Update toggle bar labels based on language
+    updateModeToggleLabels();
+  }
+
+  function showKidsPage(page) {
+    // Hide all pages
+    document.querySelectorAll('.page').forEach(p => {
+      p.classList.remove('active');
+      p.style.display = 'none';
+    });
+    const el = document.getElementById('page-' + page);
+    if (el) { el.classList.add('active'); el.style.display = 'block'; }
+    window.scrollTo(0, 0);
+  }
+
+  // Override showPage to handle kids mode
+  const _origShowPage = showPage;
+  function showPage(page) {
+    // If it's a kids page, use showKidsPage
+    if (page.startsWith('kids-')) {
+      showKidsPage(page);
+      return;
+    }
+    // Otherwise normal
+    document.querySelectorAll('.page').forEach(p => {
+      p.classList.remove('active');
+      p.style.display = 'none';
+    });
+    const el = document.getElementById('page-' + page);
+    if (el) { el.classList.add('active'); el.style.display = 'block'; }
+    document.querySelectorAll('.nav-links a[data-page]').forEach(a => {
+      a.classList.toggle('active', a.dataset.page === page);
+    });
+    document.getElementById('navLinks').classList.remove('open');
+    window.scrollTo(0, 0);
+  }
+
+  function selectKidsSpecialty(key, btn) {
+    document.querySelectorAll('#page-kids-booking .kids-card').forEach(b => {
+      b.style.transform = '';
+      b.style.background = '';
+      b.style.color = '';
+    });
+    btn.style.background = 'linear-gradient(135deg, #FF6B9D, #FFB347)';
+    btn.style.color = 'white';
+    btn.style.transform = 'scale(1.05)';
+
+    const labels = {
+      resilience:   { en: 'Building Resilience',      ar: 'المرونة النفسية' },
+      stress:       { en: 'Stress & Anxiety',          ar: 'التعامل مع الضغوط' },
+      grief:        { en: 'Loss & Grief',              ar: 'التعامل مع الفقد' },
+      separation:   { en: 'Parental Separation',       ar: 'دعم بعد الانفصال الأبوي' },
+      productivity: { en: 'Boosting Productivity',     ar: 'زيادة الإنتاجية' },
+      values:       { en: 'Values & Purpose',          ar: 'اكتشاف القيم والهدف' },
+      passion:      { en: 'Passion & Goals',           ar: 'إيجاد الشغف والأهداف' },
+      change:       { en: 'Adapting to Change',        ar: 'التكيف مع التغيير' },
+    };
+
+    kidsBooking.specialty = key;
+    const lang = currentLang === 'ar' ? 'ar' : 'en';
+    kidsBooking.specialtyName = labels[key]?.[lang] || key;
+    booking.specialty = key;
+    booking.specialtyName = kidsBooking.specialtyName;
+
+    document.getElementById('sum-kids-specialty').textContent = kidsBooking.specialtyName;
+    checkKidsBookingReady();
+  }
+
+  function checkKidsBookingReady() {
+    const ready = kidsBooking.specialty && booking.format && booking.service && booking.date && booking.time;
+    const btn = document.getElementById('kidsBookingBtn');
+    if (btn) btn.disabled = !ready;
+  }
+
+  function proceedToKidsCheckout() {
+    // Copy kids booking info to main booking and go to checkout
+    booking.specialty = kidsBooking.specialty;
+    booking.specialtyName = kidsBooking.specialtyName;
+    proceedToCheckout();
+    // Override page to show checkout
+    document.querySelectorAll('.page').forEach(p => { p.classList.remove('active'); p.style.display = 'none'; });
+    const co = document.getElementById('page-checkout');
+    if (co) { co.classList.add('active'); co.style.display = 'block'; }
+  }
+
+  // Kids calendar (mirrors main calendar but for kids pages)
+  function renderKidsCalendar() {
+    const months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    const el = document.getElementById('calMonthKids');
+    if (el) el.textContent = months[calMonth] + ' ' + calYear;
+    const grid = document.getElementById('calGridKids');
+    if (!grid) return;
+    grid.innerHTML = '';
+    ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'].forEach(d => {
+      const dl = document.createElement('div');
+      dl.className = 'cal-day-label'; dl.textContent = d; grid.appendChild(dl);
+    });
+    const firstDay = new Date(calYear, calMonth, 1).getDay();
+    const dim = new Date(calYear, calMonth+1, 0).getDate();
+    const todayKey = dayKey(today);
+    for (let i = 0; i < firstDay; i++) {
+      const e = document.createElement('div'); e.className = 'cal-day empty'; grid.appendChild(e);
+    }
+    for (let d = 1; d <= dim; d++) {
+      const el2 = document.createElement('div');
+      const date = new Date(calYear, calMonth, d);
+      const key = dayKey(date);
+      const isPast = date < new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      const isWeekend = date.getDay() === 5 || date.getDay() === 6;
+      const isToday = key === todayKey;
+      el2.textContent = d;
+      if (isPast || isWeekend) {
+        el2.className = 'cal-day past';
+      } else {
+        el2.className = 'cal-day available' + (isToday ? ' today' : '');
+        el2.onclick = () => selectKidsDate(date, el2);
+      }
+      grid.appendChild(el2);
+    }
+  }
+
+  function selectKidsDate(date, el) {
+    document.querySelectorAll('#calGridKids .cal-day').forEach(d => d.classList.remove('selected'));
+    el.classList.add('selected');
+    const mo = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+    const da = ['Sunday','Monday','Tuesday','Wednesday','Thursday','Friday','Saturday'];
+    booking.date = da[date.getDay()] + ', ' + mo[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
+    booking.dateKey = dayKey(date);
+    booking.time = null;
+    document.getElementById('selectedDateLabelKids').textContent = booking.date;
+    document.getElementById('sum-kids-datetime').textContent = booking.date;
+    document.getElementById('timeSlotSectionKids').style.display = 'block';
+    renderKidsTimeSlots();
+    checkKidsBookingReady();
+  }
+
+  function renderKidsTimeSlots() {
+    const grid = document.getElementById('slotsGridKids');
+    if (!grid) return;
+    grid.innerHTML = '';
+    const taken = bookedSlots[booking.dateKey] || [];
+    const allTimes = ["9:00 AM","10:00 AM","11:00 AM","12:00 PM","1:00 PM","2:00 PM","3:00 PM","4:00 PM","5:00 PM","6:00 PM"];
+    allTimes.forEach(t => {
+      const el = document.createElement('div');
+      el.textContent = t;
+      if (taken.includes(t)) {
+        el.className = 'slot taken';
+      } else {
+        el.className = 'slot available';
+        el.onclick = () => {
+          document.querySelectorAll('#slotsGridKids .slot').forEach(s => s.classList.remove('selected'));
+          el.classList.add('selected');
+          booking.time = t;
+          document.getElementById('sum-kids-datetime').textContent = booking.date + ' at ' + t;
+          checkKidsBookingReady();
+        };
+      }
+      grid.appendChild(el);
+    });
+  }
+
+  // Update kids summary when service/format changes
+  const origSelectOption = selectOption;
+  function selectOption(type, val, btn, name, priceStr, amount) {
+    origSelectOption(type, val, btn, name, priceStr, amount);
+    // Mirror to kids summary
+    if (type === 'format') {
+      const el = document.getElementById('sum-kids-format');
+      if (el) el.textContent = name;
+    }
+    if (type === 'service') {
+      const el = document.getElementById('sum-kids-service');
+      if (el) el.textContent = name;
+      const el2 = document.getElementById('sum-kids-price');
+      if (el2) el2.textContent = priceStr;
+    }
+    checkKidsBookingReady();
+  }
+
+  // Arabic translations for kids section
+  const KIDS_AR = {
+    'For Adults': 'للكبار',
+    'For Kids': 'للأطفال',
+    'A Safe Space for Your Child to Grow 🌱': 'مساحة آمنة لنمو طفلك 🌱',
+    'Specialized coaching for children aged 7+ — building resilience, confidence, and emotional strength.': 'تدريب متخصص للأطفال من سن 7 سنوات — بناء المرونة والثقة والقوة العاطفية.',
+    'Book a Kids Session': 'احجز جلسة للأطفال',
+    'For Kids — From 7 Years Old': 'للأطفال — من 7 سنوات',
+    'What We Work On': 'ما نعمل عليه',
+    'Coaching Specialties for Kids': 'تخصصات تدريب الأطفال',
+    "Every child is unique. Sessions are playful, safe, and completely adapted to your child's needs and personality.": 'كل طفل فريد. الجلسات ممتعة وآمنة ومصممة تماماً لاحتياجات طفلك وشخصيته.',
+    'Building Resilience': 'بناء المرونة النفسية',
+    'Managing Stress & Anxiety': 'التعامل مع الضغوط والقلق',
+    'Coping with Loss & Grief': 'التعامل مع الفقد والحزن',
+    'After Parental Separation': 'دعم بعد الانفصال الأبوي',
+    'Boosting Productivity': 'زيادة الإنتاجية',
+    'Discovering Values & Purpose': 'اكتشاف القيم والهدف',
+    'Finding Passion & Goals': 'إيجاد الشغف والأهداف',
+    'Adapting to Change': 'التكيف مع التغيير',
+    "Ready to Begin?": 'هل أنت مستعد للبدء؟',
+    "Every child deserves to feel seen, heard, and empowered. Book a session today!": 'كل طفل يستحق أن يُرى ويُسمع ويُمكَّن. احجز جلسة اليوم!',
+    'Book Now 🌟': 'احجز الآن 🌟',
+    'Simple, Transparent Pricing': 'أسعار بسيطة وشفافة',
+    'Kids Session Pricing': 'أسعار جلسات الأطفال',
+    'Same rates as adult sessions. All sessions are 1-on-1 with Coach Hala, face-to-face or via Zoom.': 'نفس أسعار جلسات الكبار. جميع الجلسات فردية مع المدربة هالة، حضورياً أو عبر زووم.',
+    'Discovery Session': 'جلسة الاكتشاف',
+    'Growth Package': 'باقة النمو',
+    'Deep Dive Session': 'جلسة التعمق',
+    'Most Popular': 'الأكثر طلباً',
+    'Save EGP 400': 'وفّر 400 جنيه',
+    "A Note for Parents": 'كلمة للوالدين',
+    'Book Package': 'احجز الباقة',
+    "Book Now": 'احجز الآن',
+    '100% Confidential': '١٠٠٪ سري',
+    'Playful & Engaging': 'ممتع وتفاعلي',
+    'In-Person or Zoom': 'حضوري أو زووم',
+    'From Age 7': 'من سن ٧ سنوات',
+    'Contact Coach Hala': 'تواصل مع المدربة هالة',
+    'Kids Session Summary': 'ملخص جلسة الأطفال',
+    'Focus Area': 'مجال التركيز',
+    'Choose a Focus Area': 'اختر مجال التركيز',
+    'Session Format': 'صيغة الجلسة',
+    'Session Duration': 'مدة الجلسة',
+    'Pick a Date & Time': 'اختر تاريخاً ووقتاً',
+    'Continue to Checkout 🌟': 'متابعة للدفع 🌟',
+    'Safe, confidential, and child-friendly sessions.': 'جلسات آمنة وسرية وملائمة للأطفال.',
+    'Book a Kids Session 🌟': 'احجز جلسة للأطفال 🌟',
+    "Schedule Your Child's Session 🌟": 'جدولة جلسة طفلك 🌟',
+    "Choose a specialty, pick a time, and let's get started on your child's growth journey.": 'اختر التخصص والوقت، لنبدأ رحلة نمو طفلك.',
+  };
+
+  function updateModeToggleLabels() {
+    const isAr = currentLang === 'ar';
+    const adultsTxt = document.getElementById('adultsBtnTxt');
+    const kidsTxt = document.getElementById('kidsBtnTxt');
+    if (adultsTxt) adultsTxt.textContent = isAr ? 'للكبار' : 'For Adults';
+    if (kidsTxt) kidsTxt.textContent = isAr ? 'للأطفال' : 'For Kids';
+  }
 
   // ══════════════════════════════════════════
   //  REGION DETECTION & PRICING
