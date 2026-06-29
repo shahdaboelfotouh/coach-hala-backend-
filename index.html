@@ -2014,7 +2014,9 @@
 
   function proceedToCheckout() {
     const amtDue = booking.deposit === 'half' ? Math.ceil(booking.priceRaw / 2) : booking.priceRaw;
-    const dtStr = booking.date + ' at ' + booking.time;
+    const dtStr = booking.dateKey === 'pkg'
+      ? 'To be scheduled after Coach Hala confirms'
+      : booking.date + ' at ' + booking.time;
 
     document.getElementById('co-service').textContent = booking.serviceName;
     document.getElementById('co-datetime').textContent = dtStr;
@@ -2326,11 +2328,43 @@
 
     const info = document.createElement('div');
     info.style.cssText = 'background:#FFF0E8;border-radius:10px;padding:1rem;font-size:.83rem;color:#6B6070;line-height:1.8;margin-bottom:1.25rem';
-    info.innerHTML = '✅ 4 sessions included<br>⏱ Max 1 hour per session<br>📅 Each session scheduled at your pace<br>💳 Pay now to reserve';
+    info.innerHTML = '✅ 4 sessions included<br>⏱ Max 1 hour per session<br>📅 <b>After paying, Coach Hala will contact you via WhatsApp (01004295182) to schedule all 4 sessions at times that work for you</b><br>💳 Pay now to reserve your package';
 
     const confirmBtn = document.createElement('button');
     confirmBtn.id = 'pkgConfirmBtn';
     confirmBtn.style.cssText = 'width:100%;padding:.9rem;background:#E8613A;color:white;border:none;border-radius:100px;font-size:.95rem;font-weight:700;cursor:pointer;opacity:.4;pointer-events:none;font-family:inherit;margin-bottom:.5rem';
+    // Deposit toggle
+    const depDiv = document.createElement('div');
+    depDiv.style.cssText = 'display:flex;gap:.5rem;margin-bottom:1rem';
+
+    const depFull = document.createElement('button');
+    depFull.style.cssText = 'flex:1;padding:.55rem;font-size:.82rem;font-weight:700;border:2px solid #E8613A;border-radius:100px;cursor:pointer;background:rgba(232,97,58,.08);color:#E8613A;font-family:inherit';
+    depFull.textContent = 'Pay in Full';
+    depFull.id = 'pkgDepFull';
+    depFull.onclick = function() {
+      booking.deposit = 'full';
+      depFull.style.background = 'rgba(232,97,58,.08)'; depFull.style.borderColor = '#E8613A'; depFull.style.color = '#E8613A';
+      depHalf.style.background = 'white'; depHalf.style.borderColor = '#EDD8CC'; depHalf.style.color = '#6B6070';
+      const p = getSvcPrice(window._pkgKey || booking.service);
+      confirmBtn.textContent = 'Pay EGP ' + p.toLocaleString() + ' in Full →';
+    };
+
+    const depHalf = document.createElement('button');
+    depHalf.style.cssText = 'flex:1;padding:.55rem;font-size:.82rem;font-weight:500;border:2px solid #EDD8CC;border-radius:100px;cursor:pointer;background:white;color:#6B6070;font-family:inherit';
+    depHalf.textContent = '50% Deposit';
+    depHalf.id = 'pkgDepHalf';
+    depHalf.onclick = function() {
+      booking.deposit = 'half';
+      depHalf.style.background = 'rgba(232,97,58,.08)'; depHalf.style.borderColor = '#E8613A'; depHalf.style.color = '#E8613A';
+      depFull.style.background = 'white'; depFull.style.borderColor = '#EDD8CC'; depFull.style.color = '#6B6070';
+      const p = Math.ceil(getSvcPrice(window._pkgKey || booking.service) / 2);
+      confirmBtn.textContent = 'Pay 50% Deposit — EGP ' + p.toLocaleString() + ' →';
+    };
+
+    depDiv.appendChild(depFull);
+    depDiv.appendChild(depHalf);
+    box.appendChild(depDiv);
+
     confirmBtn.textContent = 'Continue to Payment →';
     confirmBtn.onclick = function() { confirmPackage(); };
 
@@ -2395,13 +2429,13 @@
       const price = getSvcPrice(key);
       el.textContent = meta.sub + ' · ' + currentRegion.symbol + ' ' + price.toLocaleString();
     });
-    // If a service is already selected, update the summary price too
     if (booking.service) {
       const price = getSvcPrice(booking.service);
       booking.priceRaw = price;
       const priceStr = currentRegion.symbol + ' ' + price.toLocaleString();
       booking.servicePrice = priceStr;
-      document.getElementById('sum-price').textContent = priceStr;
+      const sumPrice = document.getElementById('sum-price');
+      if (sumPrice) sumPrice.textContent = priceStr;
       updateDepositInfo();
     }
   }
@@ -2899,60 +2933,13 @@
   }
 
   function updatePricingCards() {
-    // Update all price amounts shown on the page
-    const serviceMap = {
-      'session-1hr':   1,
-      'session-1.5hr': 1.5,
-      'session-2hr':   2,
-      'session-2.5hr': 2.5,
-      'starter':       3 * 0.95,
-      'momentum':      6 * 0.905,
-      'transformation':10 * 0.96,
-      'deepdive':      6 * 0.96,
-      'intensive':     8 * 0.975,
-      'annual':        24 * 0.952,
-    };
-
-    // Update price amounts in DOM
-    document.querySelectorAll('.price-amount').forEach((el, i) => {
-      const keys = Object.keys(serviceMap);
-      if (keys[i]) {
-        const price = Math.round(currentRegion.rate * serviceMap[keys[i]]);
-        el.textContent = price.toLocaleString();
-      }
-    });
-
-    // Update currency symbols
+    // Only update currency symbol on price-period elements
+    // Prices are fixed — do NOT recalculate them
     document.querySelectorAll('.price-period').forEach(el => {
-      el.textContent = el.textContent.replace(/^[A-Z]{2,3}|\$|£|€/, currentRegion.symbol);
+      el.textContent = el.textContent.replace(/^(EGP|AED|SAR|KWD|QAR|BHD|OMR|\$)\s*/, currentRegion.symbol + ' ');
     });
-
-    // Update booking option buttons
-    const priceUpdates = {
-      'session-1hr':    Math.round(currentRegion.rate * 1),
-      'session-1.5hr':  Math.round(currentRegion.rate * 1.5),
-      'session-2hr':    Math.round(currentRegion.rate * 2),
-      'session-2.5hr':  Math.round(currentRegion.rate * 2.5),
-      'starter':        Math.round(currentRegion.rate * 3 * 0.95),
-      'momentum':       Math.round(currentRegion.rate * 6 * 0.905),
-      'transformation': Math.round(currentRegion.rate * 10 * 0.96),
-      'deepdive':       Math.round(currentRegion.rate * 6 * 0.96),
-      'intensive':      Math.round(currentRegion.rate * 8 * 0.975),
-      'annual':         Math.round(currentRegion.rate * 24 * 0.952),
-    };
-
-    document.querySelectorAll('.option-btn .opt-sub').forEach(el => {
-      for (const [key, price] of Object.entries(priceUpdates)) {
-        if (el.textContent.includes('EGP') || el.textContent.includes('AED') || 
-            el.textContent.includes('SAR') || el.textContent.includes('$')) {
-          // Update if it contains a price
-          const match = el.textContent.match(/([A-Z]{2,3}|\$)\s*([\d,]+)/);
-          if (match) {
-            el.textContent = el.textContent.replace(match[0], currentRegion.symbol + ' ' + price.toLocaleString());
-          }
-        }
-      }
-    });
+    // Update svc-price buttons in booking form
+    refreshServiceButtonPrices();
   }
 
   function getPrice(serviceKey) {
