@@ -71,6 +71,42 @@ def root():
     return {"status": "Coach Hala API is running ✅"}
 
 
+@app.post("/book-package")
+def create_package_booking(b: BookingRequest):
+    # Package booking - no slot blocking needed
+    booking_data = {
+        "client_name":  b.client_name,
+        "client_email": b.client_email,
+        "client_phone": b.client_phone,
+        "service":      b.service,
+        "format":       b.format,
+        "specialty":    b.specialty,
+        "date":         "package",
+        "date_display": "Package - sessions to be scheduled via WhatsApp",
+        "time":         "Flexible",
+        "amount":       b.amount,
+        "deposit":      b.deposit,
+        "remaining":    b.remaining,
+        "pay_method":   b.pay_method,
+        "instapay_ref": b.instapay_ref,
+        "notes":        b.notes,
+        "emergency":    b.emergency,
+        "status":       "pending",
+        "created_at":   datetime.utcnow().isoformat()
+    }
+    result = supabase.table("bookings").insert(booking_data).execute()
+    booking_id = result.data[0]["id"]
+    try:
+        _send_coach_notification(b, booking_id)
+    except Exception as e:
+        print(f"Coach email failed: {e}")
+    try:
+        _send_client_pending(b)
+    except Exception as e:
+        print(f"Client email failed: {e}")
+    return {"success": True, "booking_id": booking_id}
+
+
 @app.get("/slots/{date_key}")
 def get_slots(date_key: str):
     taken_rows = supabase.table("blocked_slots") \
