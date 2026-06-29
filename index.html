@@ -2221,21 +2221,39 @@
   }
 
   // Service metadata
+  // Fixed prices — not calculated from hourly rate
+  const FIXED_PRICES = {
+    'session-1hr':      700,
+    'session-2hr':      1400,
+    'stress-pkg':       2660,
+    'values-pkg':       2660,
+    'career-pkg':       2660,
+    'resilience-pkg':   2660,
+    'productivity-pkg': 2660,
+    'grief-pkg':        2660,
+  };
+
   const SVC_META = {
-    'session-1hr':      {hours:1,   disc:1,     label:'1 Hour Session',             sub:'1 Hour',    labelAr:'جلسة ساعة واحدة'},
-    'session-2hr':      {hours:2,   disc:1,     label:'2 Hour Session',             sub:'2 Hours',   labelAr:'جلسة ساعتين'},
-    'stress-pkg':       {hours:4,   disc:0.95,  label:'Stress & Pressure Package',  sub:'4×1hr',     labelAr:'جلسات التعامل مع الضغوط النفسية'},
-    'values-pkg':       {hours:4,   disc:0.95,  label:'Values Discovery Package',   sub:'4×1hr',     labelAr:'جلسات اكتشاف القيم وتفعيلها في الحياة'},
-    'career-pkg':       {hours:6,   disc:0.905, label:'Passion & Career Package',   sub:'6×1hr',     labelAr:'جلسات إيجاد العمل المناسب والشغف'},
-    'resilience-pkg':   {hours:6,   disc:0.905, label:'Resilience Package',         sub:'6×1hr',     labelAr:'جلسات المرونة النفسية في مواجهة التحديات'},
-    'productivity-pkg': {hours:4,   disc:0.95,  label:'Productivity Package',       sub:'4×1hr',     labelAr:'جلسات زيادة الإنتاجية'},
-    'grief-pkg':        {hours:4,   disc:0.95,  label:'Grief & Loss Package',       sub:'4×1hr',     labelAr:'جلسات التعامل مع الفقد'},
+    'session-1hr':      {label:'Single Session (up to 1hr)',              sub:'1 session · 45–60 min',  labelAr:'جلسة فردية (حتى ساعة)',               price:700,  isPackage:false},
+    'session-2hr':      {label:'Double Session (up to 1.5hrs)',            sub:'2 sessions · billed ×2', labelAr:'جلستان (حتى ساعة ونصف)',              price:1400, isPackage:false},
+    'stress-pkg':       {label:'Stress & Psychological Pressure Package',  sub:'4 sessions · max 1hr each', labelAr:'جلسات التعامل مع الضغوط النفسية',  price:2660, isPackage:true},
+    'values-pkg':       {label:'Values Discovery & Activation Package',    sub:'4 sessions · max 1hr each', labelAr:'جلسات اكتشاف القيم وتفعيلها في الحياة', price:2660, isPackage:true},
+    'career-pkg':       {label:'Finding Career & Passion Package',         sub:'4 sessions · max 1hr each', labelAr:'جلسات إيجاد العمل المناسب والشغف',  price:2660, isPackage:true},
+    'resilience-pkg':   {label:'Resilience Coaching Package',              sub:'4 sessions · max 1hr each', labelAr:'جلسات المرونة النفسية في مواجهة التحديات', price:2660, isPackage:true},
+    'productivity-pkg': {label:'Productivity Coaching Package',            sub:'4 sessions · max 1hr each', labelAr:'جلسات زيادة الإنتاجية',             price:2660, isPackage:true},
+    'grief-pkg':        {label:'Grief & Loss Coaching Package',            sub:'4 sessions · max 1hr each', labelAr:'جلسات التعامل مع الفقد',            price:2660, isPackage:true},
   };
 
   function getSvcPrice(key) {
     const m = SVC_META[key];
     if (!m) return 0;
-    return Math.round(currentRegion.rate * m.hours * m.disc);
+    // For Egypt use fixed EGP prices; for other regions scale proportionally
+    if (currentRegion.currency === 'EGP') {
+      return m.price;
+    }
+    // Scale: ratio of regional rate to EGP 700 base
+    const ratio = currentRegion.rate / 700;
+    return Math.round(m.price * ratio);
   }
 
   function selectServiceOption(btn) {
@@ -2255,6 +2273,118 @@
     document.getElementById('sum-price').textContent = priceStr;
     updateDepositInfo();
     checkProceed();
+
+    // If it's a package, jump straight to checkout after a short delay
+    if (meta.isPackage) {
+      // Still need format & specialty — show a quick modal to collect them
+      showPackageModal(key, nameStr, price, priceStr);
+    }
+  }
+
+  function showPackageModal(key, name, price, priceStr) {
+    const existing = document.getElementById('pkgModal');
+    if (existing) existing.remove();
+    window._pkgKey = key; window._pkgName = name; window._pkgPrice = price; window._pkgPriceStr = priceStr;
+    window._pkgFormat = null;
+
+    const overlay = document.createElement('div');
+    overlay.id = 'pkgModal';
+    overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.55);z-index:4000;display:flex;align-items:center;justify-content:center;padding:1rem';
+
+    const box = document.createElement('div');
+    box.style.cssText = 'background:white;border-radius:16px;padding:2rem;max-width:460px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,.25)';
+
+    const title = document.createElement('h3');
+    title.style.cssText = 'font-size:1.35rem;color:#2C2424;margin-bottom:.25rem';
+    title.textContent = name;
+
+    const sub = document.createElement('p');
+    sub.style.cssText = 'font-size:.84rem;color:#6B6070;margin-bottom:1.5rem;border-bottom:1px solid #EDD8CC;padding-bottom:1rem';
+    sub.textContent = '4 sessions · max 1 hour each · ' + priceStr;
+
+    const fmtLabel = document.createElement('div');
+    fmtLabel.style.cssText = 'font-size:.82rem;font-weight:700;color:#2C2424;margin-bottom:.5rem';
+    fmtLabel.textContent = 'Choose Session Format:';
+
+    const fmtGrid = document.createElement('div');
+    fmtGrid.style.cssText = 'display:grid;grid-template-columns:1fr 1fr;gap:.5rem;margin-bottom:1.25rem';
+
+    const btnZoom = document.createElement('button');
+    btnZoom.id = 'pkg-zoom';
+    btnZoom.style.cssText = 'padding:.75rem;border:2px solid #EDD8CC;border-radius:10px;cursor:pointer;font-family:inherit;font-size:.85rem;background:white;color:#2C2424';
+    btnZoom.textContent = '📹 Zoom Call';
+    btnZoom.onclick = function() { selectPkgFormat('zoom', this); };
+
+    const btnPerson = document.createElement('button');
+    btnPerson.id = 'pkg-inperson';
+    btnPerson.style.cssText = 'padding:.75rem;border:2px solid #EDD8CC;border-radius:10px;cursor:pointer;font-family:inherit;font-size:.85rem;background:white;color:#2C2424';
+    btnPerson.textContent = '🏢 In-Person';
+    btnPerson.onclick = function() { selectPkgFormat('inperson', this); };
+
+    fmtGrid.appendChild(btnZoom);
+    fmtGrid.appendChild(btnPerson);
+
+    const info = document.createElement('div');
+    info.style.cssText = 'background:#FFF0E8;border-radius:10px;padding:1rem;font-size:.83rem;color:#6B6070;line-height:1.8;margin-bottom:1.25rem';
+    info.innerHTML = '✅ 4 sessions included<br>⏱ Max 1 hour per session<br>📅 Each session scheduled at your pace<br>💳 Pay now to reserve';
+
+    const confirmBtn = document.createElement('button');
+    confirmBtn.id = 'pkgConfirmBtn';
+    confirmBtn.style.cssText = 'width:100%;padding:.9rem;background:#E8613A;color:white;border:none;border-radius:100px;font-size:.95rem;font-weight:700;cursor:pointer;opacity:.4;pointer-events:none;font-family:inherit;margin-bottom:.5rem';
+    confirmBtn.textContent = 'Continue to Payment →';
+    confirmBtn.onclick = function() { confirmPackage(); };
+
+    const cancelBtn = document.createElement('button');
+    cancelBtn.style.cssText = 'width:100%;padding:.6rem;background:none;border:none;color:#6B6070;cursor:pointer;font-family:inherit;font-size:.84rem';
+    cancelBtn.textContent = 'Cancel';
+    cancelBtn.onclick = function() { document.getElementById('pkgModal').remove(); };
+
+    box.appendChild(title);
+    box.appendChild(sub);
+    box.appendChild(fmtLabel);
+    box.appendChild(fmtGrid);
+    box.appendChild(info);
+    box.appendChild(confirmBtn);
+    box.appendChild(cancelBtn);
+    overlay.appendChild(box);
+    document.body.appendChild(overlay);
+  }
+
+  function selectPkgFormat(fmt, btn) {
+    document.querySelectorAll('#pkg-zoom,#pkg-inperson').forEach(b => {
+      b.style.borderColor = '#EDD8CC';
+      b.style.background = 'white';
+      b.style.color = '#2C2424';
+    });
+    btn.style.borderColor = '#E8613A';
+    btn.style.background = 'rgba(232,97,58,.08)';
+    btn.style.color = '#E8613A';
+    window._pkgFormat = fmt;
+    booking.format = fmt;
+    booking.formatName = fmt === 'zoom' ? 'Zoom Call' : 'In-Person';
+    // Enable confirm button
+    const confirmBtn = document.getElementById('pkgConfirmBtn');
+    if (confirmBtn) {
+      confirmBtn.style.opacity = '1';
+      confirmBtn.style.pointerEvents = 'auto';
+    }
+  }
+
+  function confirmPackage() {
+    if (!window._pkgFormat) return;
+    booking.service       = window._pkgKey;
+    booking.serviceName   = window._pkgName;
+    booking.servicePrice  = window._pkgPriceStr;
+    booking.priceRaw      = window._pkgPrice;
+    booking.format        = window._pkgFormat;
+    booking.formatName    = window._pkgFormat === 'zoom' ? 'Zoom Call' : 'In-Person';
+    booking.specialty     = 'package';
+    booking.specialtyName = window._pkgName;
+    booking.date          = 'To be scheduled after confirmation';
+    booking.dateKey       = 'pkg';
+    booking.time          = 'Flexible';
+    document.getElementById('pkgModal').remove();
+    proceedToCheckout();
   }
 
   function refreshServiceButtonPrices() {
@@ -2277,13 +2407,22 @@
   }
 
   function selectServiceAndBook(service) {
-    showPage('booking');
-    setTimeout(() => {
-      const btns = document.querySelectorAll('#page-booking .option-btn');
-      btns.forEach(btn => {
-        if (btn.getAttribute('onclick') && btn.getAttribute('onclick').includes("'" + service + "'")) btn.click();
-      });
-    }, 120);
+    const meta = SVC_META[service];
+    if (meta && meta.isPackage) {
+      // For packages go straight to package modal
+      const price = getSvcPrice(service);
+      const priceStr = currentRegion.symbol + ' ' + price.toLocaleString();
+      const name = (currentLang === 'ar' && meta.labelAr) ? meta.labelAr : meta.label;
+      showPackageModal(service, name, price, priceStr);
+    } else {
+      showPage('booking');
+      setTimeout(() => {
+        const btns = document.querySelectorAll('#page-booking [data-svc]');
+        btns.forEach(btn => {
+          if (btn.dataset.svc === service) btn.click();
+        });
+      }, 120);
+    }
   }
 
   // ── CALENDAR ──
