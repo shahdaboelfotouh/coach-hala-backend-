@@ -2133,26 +2133,20 @@
         emergency:    emergency
       };
 
-      let res, data;
+      // Try Railway backend (optional — booking continues even if it's down)
+      let data = { booking_id: 'local-' + Date.now() };
       try {
-        res = await apiCall(endpoint, { method: 'POST', body: JSON.stringify(bookingData) });
-        // If /book-package doesn't exist, fall back to /book
-        if (!res.ok && isPackage && res.status === 404) {
-          res = await apiCall('/book', { method: 'POST', body: JSON.stringify({...bookingData, date_key: 'package', time: 'Flexible'}) });
+        const backendRes = await Promise.race([
+          apiCall(endpoint, { method: 'POST', body: JSON.stringify(bookingData) }),
+          new Promise((_, rej) => setTimeout(() => rej(new Error('timeout')), 4000))
+        ]);
+        if (backendRes.ok) {
+          const backendData = await backendRes.json();
+          if (backendData.booking_id) data = backendData;
         }
-        data = await res.json();
-      } catch(e) {
-        // If backend unreachable for packages, continue anyway
-        if (isPackage) { data = { success: true }; res = { ok: true }; }
-        else throw e;
-      }
-
-      if (!res.ok && !isPackage) {
-        showNotification(data.detail || 'This slot was just taken. Please choose another time.', 'error');
-        btn.disabled = false;
-        btn.textContent = '🔒 Complete Booking';
-        if (booking.dateKey) renderRealTimeSlots(booking.dateKey);
-        return;
+      } catch(backendErr) {
+        console.log('Backend unavailable, using frontend-only mode:', backendErr);
+        // Continue without backend — Web3Forms will handle the notification
       }
 
       // Send Formspree notification (guaranteed delivery to halalife81@gmail.com)
@@ -3490,4 +3484,4 @@
 
 </script>
 </body>
-</html>
+</html>v
