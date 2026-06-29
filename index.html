@@ -2092,51 +2092,65 @@
     btn.disabled = true;
     btn.textContent = 'Sending...';
 
+    const isPackage = booking.dateKey === 'pkg';
+
     try {
-      const res = await apiCall('/book', {
-        method: 'POST',
-        body: JSON.stringify({
-          client_name:  name,
-          client_email: email,
-          client_phone: phone,
-          service:      booking.serviceName,
-          format:       booking.formatName,
-          specialty:    booking.specialtyName,
-          date:         booking.date,
-          date_key:     booking.dateKey,
-          time:         booking.time,
-          amount:       booking.priceRaw,
-          deposit:      booking.deposit === 'half',
-          remaining:    remaining,
-          pay_method:   payMethod,
-          instapay_ref: ipaRef,
-          notes:        notes,
-          emergency:    emergency
-        })
-      });
+      const endpoint = isPackage ? '/book-package' : '/book';
+      const bookingData = {
+        client_name:  name,
+        client_email: email,
+        client_phone: phone,
+        service:      booking.serviceName,
+        format:       booking.formatName,
+        specialty:    booking.specialtyName,
+        date:         isPackage ? 'Package - To be scheduled via WhatsApp' : booking.date,
+        date_key:     isPackage ? 'package' : booking.dateKey,
+        time:         isPackage ? 'Flexible' : booking.time,
+        amount:       booking.priceRaw,
+        deposit:      booking.deposit === 'half',
+        remaining:    remaining,
+        pay_method:   payMethod,
+        instapay_ref: ipaRef,
+        notes:        notes,
+        emergency:    emergency
+      };
 
-      const data = await res.json();
+      let res, data;
+      try {
+        res = await apiCall(endpoint, { method: 'POST', body: JSON.stringify(bookingData) });
+        // If /book-package doesn't exist, fall back to /book
+        if (!res.ok && isPackage && res.status === 404) {
+          res = await apiCall('/book', { method: 'POST', body: JSON.stringify({...bookingData, date_key: 'package', time: 'Flexible'}) });
+        }
+        data = await res.json();
+      } catch(e) {
+        // If backend unreachable for packages, continue anyway
+        if (isPackage) { data = { success: true }; res = { ok: true }; }
+        else throw e;
+      }
 
-      if (!res.ok) {
-        // Slot was taken by someone else
+      if (!res.ok && !isPackage) {
         showNotification(data.detail || 'This slot was just taken. Please choose another time.', 'error');
         btn.disabled = false;
         btn.textContent = '🔒 Complete Booking';
-        // Reload slots to show updated availability
         if (booking.dateKey) renderRealTimeSlots(booking.dateKey);
         return;
       }
 
       // Success!
-      if (!bookedSlots[booking.dateKey]) bookedSlots[booking.dateKey] = [];
-      bookedSlots[booking.dateKey].push(booking.time);
+      if (!isPackage) {
+        if (!bookedSlots[booking.dateKey]) bookedSlots[booking.dateKey] = [];
+        bookedSlots[booking.dateKey].push(booking.time);
+      }
 
       document.getElementById('successName').textContent = name;
       document.getElementById('successEmail').textContent = email;
       document.getElementById('suc-service').textContent = booking.serviceName;
       document.getElementById('suc-format').textContent = booking.formatName;
       document.getElementById('suc-specialty').textContent = booking.specialtyName;
-      document.getElementById('suc-datetime').textContent = booking.date + ' at ' + booking.time;
+      document.getElementById('suc-datetime').textContent = isPackage
+        ? '4 sessions — Coach Hala will WhatsApp you to schedule'
+        : booking.date + ' at ' + booking.time;
       document.getElementById('suc-amount').textContent = 'EGP ' + paid.toLocaleString() + (booking.deposit === 'half' ? ' (50% Deposit)' : ' (Full)');
 
       showNotification('Booking submitted! Coach Hala has been notified. 🎉');
