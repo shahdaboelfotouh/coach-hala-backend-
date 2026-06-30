@@ -13,7 +13,7 @@ FastAPI backend with Supabase database and Resend email service.
 - Sends clients a beautiful confirmation email when Hala confirms
 - Sends clients a declined email with link to rebook
 - Supports deposit reminders
-
+ 
 ---
 
 ## Setup — Step by Step
